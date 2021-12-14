@@ -1,5 +1,5 @@
 ### Download
-[smtp-gated-1.4.21.tar.gz](./smtp-gated-1.4.21.tar.gz)
+[smtp-gated-1.4.21.tar.gz](https://github.com/vpithart/smtp-gated/archive/refs/tags/v1.4.21.tar.gz)
 
 ### Change Log
 version 1.4.21 (2021-12-14)
