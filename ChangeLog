@@ -2,7 +2,8 @@ SMTP-Gateway (aka smtp-gated) proxy changelog
 ---------------------------------------------
 
 1.4.21 : 2021-12-14
-  - Fixed to compile with modern gcc 8.x on Debian 10/11
+  - Fixed to compile with modern gcc 8.x on Debian 10
+  - Fixed to compile with modern gcc 10.x on Debian 11
 
 1.4.20.0 : 2013.02.26
   - FIXME auth_skip direct: should flush buffers

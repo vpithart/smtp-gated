@@ -479,7 +479,7 @@ void queue_commandp(smtp_command_t command, struct session_t *data, pipeline_arg
 		pipeline_full(data);
 } /* queue_commandp() */
 
-inline void queue_command(smtp_command_t command, struct session_t *data)
+void queue_command(smtp_command_t command, struct session_t *data)
 {
 	return queue_commandp(command, data, arg_t_p(NULL), arg_t_p(NULL));
 } /* queue_command() */
