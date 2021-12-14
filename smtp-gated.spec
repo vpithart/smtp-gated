@@ -10,7 +10,7 @@ License: GNU GPL
 Vendor: Bartlomiej Korupczynski <bartek@klolik.org>
 Provides: smtp-proxy
 Packager: Bartlomiej Korupczynski <bartek@klolik.org>
-URL: http://smtp-proxy.klolik.org
+URL: https://vpithart.github.io/smtp-gated/
 Source: %{name}-%{rpm_full}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 PreReq: /usr/bin/id /sbin/chkconfig

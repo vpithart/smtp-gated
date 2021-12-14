@@ -149,13 +149,9 @@ client ident*
 
 smtp-gated.conf(5)
 
-= BUGS =
-
-See http://smtp-proxy.klolik.org/#bugs for details.
-
 = HOMEPAGE =
 
-http://smtp-proxy.klolik.org
+https://vpithart.github.io/smtp-gated/
 
 = AUTHOR =
 

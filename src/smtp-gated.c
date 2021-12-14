@@ -3,7 +3,7 @@
  *
  *	SMTP Transparent Proxy
  *	Bartlomiej Korupczynski
- *	http://smtp-proxy.klolik.org
+ *	https://vpithart.github.io/smtp-gated/
  *	(c) Warszawa 2004-2005
  *	GNU GPL License
  *
