@@ -132,7 +132,7 @@ session running time
 : **source**
 source (client) IP
 : **target**
-destination (server/MTA) IP 
+destination (server/MTA) IP
 : **trns**
 number of current transaction
 : **cli_rx**
@@ -163,5 +163,3 @@ http://smtp-proxy.klolik.org
 %xhtml%Bartlomiej Korupczynski
 %xhtml%
 %xhtml%[who.png]
-
-

@@ -8,3 +8,5 @@ src/.deps
 src/*.o
 src/md5-test
 src/smtp-gated
+autom4te.cache
+src/regex-test
