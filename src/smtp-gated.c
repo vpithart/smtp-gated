@@ -820,7 +820,7 @@ void cleanup()
 	}
 } /* cleanup() */
 
-inline void cleanup_exit(int code)
+void cleanup_exit(int code)
 {
 	cleanup();
 	exit(code);

@@ -13,7 +13,7 @@ Bartlomiej Korupczynski
 
 = VERSION =
 
-This manual describes smtp-gated v. 1.4.20.0
+This manual describes smtp-gated v. 1.4.21
 
 = SYNOPSIS =
 
@@ -132,7 +132,7 @@ session running time
 : **source**
 source (client) IP
 : **target**
-destination (server/MTA) IP 
+destination (server/MTA) IP
 : **trns**
 number of current transaction
 : **cli_rx**
@@ -163,5 +163,3 @@ http://smtp-proxy.klolik.org
 %xhtml%Bartlomiej Korupczynski
 %xhtml%
 %xhtml%[who.png]
-
-

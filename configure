@@ -3072,8 +3072,8 @@ fi
 
 
 # Define the identity of the package.
- PACKAGE=smtp-gated
- VERSION=1.4.20.0
+PACKAGE=smtp-gated
+VERSION=1.4.21
 
 
 cat >>confdefs.h <<_ACEOF

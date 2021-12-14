@@ -16,7 +16,7 @@
 #	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-EXTRA_DIST = configure smtp-gated.spec smtp-gated.spec.in bootstrap.sh README.PL debian .released
+EXTRA_DIST = configure smtp-gated.spec smtp-gated.spec.in bootstrap.sh debian .released
 SUBDIRS = src doc contrib lib lang tests
 
 #test:

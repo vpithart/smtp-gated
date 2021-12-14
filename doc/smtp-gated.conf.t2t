@@ -14,7 +14,7 @@ Bartlomiej Korupczynski
 
 = VERSION =
 
-This manual describes smtp-gated v. 1.4.20.0
+This manual describes smtp-gated v. 1.4.21
 
 
 = DESCRIPTION =
@@ -176,10 +176,10 @@ maybe earlier. See ./configure summary.
 # NAT module must be loaded
 iptables -t nat -N placeholder
 # packets for proxy need to be tproxied
-iptables -t mangle -N divert 
+iptables -t mangle -N divert
 iptables -t mangle -A divert -j MARK --set-mark 1
-iptables -t mangle -A divert -j ACCEPT 
-iptables -t mangle -A PREROUTING -p tcp -m socket -j divert 
+iptables -t mangle -A divert -j ACCEPT
+iptables -t mangle -A PREROUTING -p tcp -m socket -j divert
 iptables -t mangle -A PREROUTING -p tcp --dport 25 -j TPROXY --tproxy-mark 0x1/0x1 --on-port 9199
 # packets for tproxy need to be rerouted
 ip rule add fwmark 1 lookup 100
@@ -854,4 +854,3 @@ http://smtp-proxy.klolik.org
 %xhtml%Bartlomiej Korupczynski
 %xhtml%
 %xhtml%[who.png]
-

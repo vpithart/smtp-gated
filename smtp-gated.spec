@@ -1,9 +1,9 @@
 %define user smtpgw
-%define rpm_full 1.4.20.0
+%define rpm_full 1.4.21
 
 Summary: SMTP Transparent Proxy
 Name: smtp-gated
-Version: 1.4.20.0
+Version: 1.4.21
 Release: 1
 Group: System Environment/Daemons
 License: GNU GPL
@@ -52,7 +52,7 @@ mkdir -p var/run/%{name}
 
 %files
 %defattr(0644,root,root,0755)
-%doc AUTHORS ChangeLog COPYING INSTALL NEWS README README.PL
+%doc AUTHORS ChangeLog COPYING INSTALL README
 %doc contrib/fixed.conf contrib/nat.conf
 %config(noreplace)	%{_sysconfdir}/%{name}.conf
 %{_mandir}

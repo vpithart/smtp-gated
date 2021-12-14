@@ -52,7 +52,7 @@ mkdir -p var/run/%{name}
 
 %files
 %defattr(0644,root,root,0755)
-%doc AUTHORS ChangeLog COPYING INSTALL NEWS README README.PL
+%doc AUTHORS ChangeLog COPYING INSTALL README
 %doc contrib/fixed.conf contrib/nat.conf
 %config(noreplace)	%{_sysconfdir}/%{name}.conf
 %{_mandir}
