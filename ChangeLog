@@ -350,5 +350,3 @@ SMTP-Gateway (aka smtp-gated) proxy changelog
 
 1.0.0 : 2004.02
   - first version
-
-: vim: set syntax=changelog textwidth=80 tabstop=4 shiftwidth=4 :
