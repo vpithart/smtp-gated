@@ -1,12 +1,12 @@
 /*
  * 	daemon.c
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -219,7 +219,7 @@ int daemonize(char *log_ident, int log_facility, int process_priority,
 			goto err_rem_pid;
 		}
 		new_gid = (grp != NULL) ? grp->gr_gid : pw->pw_gid;
-		
+
 		if (initgroups(pw->pw_name, new_gid) != 0) {
 			log_action(LOG_CRIT, "initgroups() failed: %s", strerror(errno));
 			goto err_rem_pid;
@@ -336,5 +336,3 @@ int lower_privileges()
 	}
 	return 0;
 }
-
-

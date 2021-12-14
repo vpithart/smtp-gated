@@ -12,7 +12,7 @@ SMTP-Gateway (aka smtp-gated) proxy changelog
 1.4.18.8 : 2011.12.04
   - FIXME: experimental ratelimit support (options: ratelimit_*); to be changed
   - regex-match debugging logs
-  - setting proxy_name to "*" (asterisk, without quotes) uses 
+  - setting proxy_name to "*" (asterisk, without quotes) uses
 	system hostname&domainname (from now on by default)
   - fixed without USE_NAT_TPROXY
   - SOL_IP changed to IPPROTO_IP to be more portable
@@ -151,7 +151,7 @@ SMTP-Gateway (aka smtp-gated) proxy changelog
   - common log format ("src=" or "dst=" instead of "host=")
   - gcc4: fixed struct init in src/vars.h
 
-1.4.12-rc4 : 
+1.4.12-rc4 :
   - remove spool file if pipeline is overflown (spool shall be empty anyway)
   - add \n at the end of lockfile
 
@@ -161,7 +161,7 @@ SMTP-Gateway (aka smtp-gated) proxy changelog
 1.4.12-rc2 : 2005.03.14
   - test-suite included in distribution
 
-1.4.12-rc1 : 
+1.4.12-rc1 :
   - nat_header=2: wlacza prosty naglowek, "HEADER: ip_zrodlowe"
   - TCP sockets support for spamd_path and clamd_path
   - email_length: e-mail logging length limit (before md5), moved to runtime
@@ -349,4 +349,3 @@ SMTP-Gateway (aka smtp-gated) proxy changelog
   - first version
 
 : vim: set syntax=changelog textwidth=80 tabstop=4 shiftwidth=4 :
-

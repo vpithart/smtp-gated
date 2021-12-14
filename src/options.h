@@ -1,12 +1,12 @@
 /*
  * 	options.h
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -21,7 +21,7 @@
 
 /*
  * this file generates:
- * - configuration file syntax 
+ * - configuration file syntax
  * - configuration structure
  *
  * all preprocessor conditionals must evaluate to the same results
@@ -437,4 +437,3 @@ CONF_OPT_STR_VERBOSE(msg_regex_helo, MSG_REGEX_HELO)
 CONF_OPT_STR_VERBOSE(msg_regex_mail_from, MSG_REGEX_MAIL_FROM)
 CONF_OPT_STR_VERBOSE(msg_regex_rcpt_to, MSG_REGEX_RCPT_TO)
 #endif
-

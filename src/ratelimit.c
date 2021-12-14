@@ -1,12 +1,12 @@
 /*
  * 	ratelimit.c
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -450,7 +450,7 @@ int ratelimit_init()
 	if (manager_pid != 0) return 0;
 
 	// signals setup?
-	
+
 	ratelimit_manager();
 	exit(0);
 }
@@ -485,17 +485,17 @@ int ratelimit_manager()
 	ssize_t size;
 	struct ratelimit_request_t rlrq;
 	struct ratelimit_response_t rlres;
-	
+
 	memset(rlrq, 0, sizeof(rlrq));
 	memset(rlres, 0, sizeof(rlres));
-	
+
 	for (;;) {
 		if ((size = msgrcv(rlid, (struct msgbuf *) &rlrq, sizeof(rlrq), RATELIMIT_MANAGER_ID, 0) == -1)) {
 			if (errno == EINTR) continue;
 			log_action(LOG_ERROR, "ratelimit.msgrcv(): %s", strerror(errno));
 			break;
 		}
-		
+
 		if (size != sizeof(rlrq)) {
 			log_action(LOG_ERROR, "ratelimit.size_mismatch");
 			continue;
@@ -521,4 +521,3 @@ int ratelimit_manager()
 	// save_cache()
 }
 #endif
-

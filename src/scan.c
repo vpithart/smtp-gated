@@ -1,12 +1,12 @@
 /*
  *	scan.c
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -177,7 +177,7 @@ static spam_result as_spamassassin(char *filename, double *score)
 		if ((len = read(file, buf, sizeof(buf))) == -1) {
 			// SIGALRM sets timedout flags
 			if (errno == EINTR) continue;
-			
+
 			log_action(LOG_CRIT, "spamd:read(file) error: %s", strerror(errno));
 			goto fail;
 		}
@@ -566,7 +566,7 @@ static av_result av_mks32(char *filename, char **name)
 
 	child_reaper();
 	if (WIFEXITED(child_status) == 0) return SCAN_FAILED;
-	
+
 	res = WEXITSTATUS(child_status);
 	if (res > 0x07) return SCAN_FAILED;
 	if (res & 0x07) return SCAN_VIRUS;
@@ -611,7 +611,7 @@ av_result av_scanner(char *filename, char **result)
 spam_result spam_scanner(char *filename, double *score)
 {
 //	*score = 0.0;
-	
+
 	switch (config.antispam_type) {
 		case AS_NONE:
 			return SPAM_SKIPPED;
@@ -630,7 +630,7 @@ spam_result spam_scanner(char *filename, double *score)
 
 /*
 	tbf + penalty
-	
+
 	non-header/body:
 		CHECK:REJECT engine=load load=2.1 of=0.8
 		CHECK:REJECT engine=host count=10 of=10
@@ -653,17 +653,15 @@ spam_result spam_scanner(char *filename, double *score)
  * check_before_connect(): maxident
  * check_after_connect(): dnsbl+!skip_auth
  * check_before_helo(): regex_helo
- * check_after_helo(): 
+ * check_after_helo():
  * check_before_mailfrom(): spf, regex_mailfrom, dnsbl+skip_auth
- * check_after_mailfrom(): 
+ * check_after_mailfrom():
  * check_before_rcptto(): regex_rcptto
  * check_after_rcptto():
  * check_before_data():
  * check_after_data(): antivirus, antispam, regex_body
  * check_header():
- * check_body(): 
+ * check_body():
  *
  * %s:SCAN_XXX
 */
-
-

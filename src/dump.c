@@ -1,12 +1,12 @@
 /*
  *	dump.c
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -81,7 +81,7 @@ void log_stats()
 	stats->rejects_ident = stats->viruses = stats->spams = stats->rejects_dnsbl =
 	   stats->spf = stats->noauths = stats->requests_empty = stats->rejects_rate = -1;
 #endif
-	
+
 	log_action(LOG_INFO, "uptime=%ud%uh%um%us maxchildren=%u" \
 			" crash=%u@%" FORMAT_TIME_T " bugs=%u@%" FORMAT_TIME_T \
 			" found=%u/%u/%u/%u requests=%u/%u/%u rejects=%u/%u/%u/%u/%u/%u/%u/%u",
@@ -111,7 +111,7 @@ void dump_state()
 
 	snprintf(tmp_statefile, sizeof(tmp_statefile), "%s.tmp", config.statefile);
 	TERMINATE_STRING(tmp_statefile);
-	
+
 	fd = open(tmp_statefile, O_WRONLY | O_CREAT | O_TRUNC, config.statefile_perm);
 	if (fd == -1) {
 		log_action(LOG_ERR, "can't open dump file [%s]: %s", config.statefile, strerror(errno));
@@ -124,7 +124,7 @@ void dump_state()
 	memset(flags, 0, sizeof(flags));
 #else
 	stats->rejects_ident = stats->viruses = stats->spams = stats->rejects_dnsbl =
-		stats->regex = stats->spf = stats->noauths = stats->requests_empty = 
+		stats->regex = stats->spf = stats->noauths = stats->requests_empty =
 		stats->auth_accepts = stats->auth_rejects = 0;
 #endif
 
@@ -226,7 +226,7 @@ void dump_state()
 				speed = 0;
 			}
 			flags[0] = IS_FLAG_SET(ci->auth, AUTH_FLAG_ACCEPTED) ? 'A' : (IS_FLAG_SET(ci->auth, AUTH_FLAG_SUPPORTED) ? 'a' : '.');
-			
+
 			if (IS_FLAG_CLEARED(config.statefile_type, DUMPFILE_TYPE_FLAT)) {
 				fdprintf(fd, "%6u %-5" FORMAT_PID_T " ", i, pids[i]);
 				fdprintf(fd, "%-8s", conn_states[ci->state]);
@@ -275,7 +275,7 @@ void dump_ver(int verbose)
 	CONF_SS2("version", VERSION);
 	CONF_HH2("helper protocol version", PH_PROTO_VERSION);
 	CONF_SS2("compile date", compile_date());
-	
+
 	if (!verbose) {
 		printf("\nThis program is distributed under GNU GPL license, without\n");
 	       	printf("any warranty. For more information see COPYING file.\n");
@@ -356,5 +356,3 @@ void dump_ver(int verbose)
 	CONF_D2(sizeof(struct pipeline_t));
 	CONF_D2(sizeof(struct ratelimit_record_t));
 } /* dump_ver() */
-
-

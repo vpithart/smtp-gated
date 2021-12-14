@@ -1,12 +1,12 @@
 /*
  * 	confvars.h
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -57,18 +57,18 @@
 	#define CONF_OPT_STR_VERBOSE(a, v)	{ CONFIG_STR, #a, &config.a, 0, CONF_FLAG_VERBOSE, { .s = (v) } },
 	#define CONF_OPT_IP4(a, v)		{ CONFIG_IP4, #a, &config.a, 0, CONF_FLAG_NONE, { .s = (v) } },
 	#define CONF_OPT_IP4_EMPTY(a, v)	{ CONFIG_IP4, #a, &config.a, 0, CONF_FLAG_EMPTY, { .s = (v) } },
-	
+
 	// integer types
 	#define CONF_OPT_INT(a, v)		{ CONFIG_INT, #a, &config.a, 0, CONF_FLAG_NONE, { .i = (v) } },
 	#define CONF_OPT_BOOL(a, v)		{ CONFIG_BOOL, #a, &config.a, 0, CONF_FLAG_NONE, { .i = (v) } },
 	#define CONF_OPT_PORT(a, v)		{ CONFIG_PORT, #a, &config.a, 0, CONF_FLAG_NONE, { .i = (v) } },
 	#define CONF_FOPT_PORT(a, v, f)		{ CONFIG_PORT, #a, &config.a, 0, f, { .i = (v) } },
-	
+
 	// unsigned integer types
 	#define CONF_OPT_UINT(a, v)		{ CONFIG_UINT, #a, &config.a, 0, CONF_FLAG_NONE, { .u = (v) } },
 	#define CONF_OPT_HEX(a, v)		{ CONFIG_UINT, #a, &config.a, 0, CONF_FLAG_HEX, { .u = (v) } },
 	#define CONF_OPT_OCT(a, v)		{ CONFIG_UINT, #a, &config.a, 0, CONF_FLAG_OCT, { .u = (v) } },
-	
+
 	// floating types
 	#define CONF_OPT_DOUBLE(a, v)		{ CONFIG_DOUBLE, #a, &config.a, 0, CONF_FLAG_NONE, { .d = (v) } },
 
@@ -102,18 +102,18 @@
 	#define CONF_OPT_STR_VERBOSE(a, v)	CONF_OPT_STR(a, v)
 	#define CONF_OPT_IP4(a, v)		CONF_OPT_STR(a, v)
 	#define CONF_OPT_IP4_EMPTY(a, v)		CONF_OPT_STR(a, v)
-	
+
 	// integer types
 	#define CONF_OPT_INT(a, v)		int a;
 	#define CONF_OPT_BOOL(a, v)		CONF_OPT_INT(a, v)
 	#define CONF_OPT_PORT(a, v)		CONF_OPT_INT(a, v)
 	#define CONF_FOPT_PORT(a, v, f)		CONF_OPT_INT(a, v)
-	
+
 	// unsigned integer types
 	#define CONF_OPT_UINT(a, v)		uint a;
 	#define CONF_OPT_HEX(a, v)		CONF_OPT_UINT(a, v)
 	#define CONF_OPT_OCT(a, v)		CONF_OPT_UINT(a, v)
-	
+
 	// floating types
 	#define CONF_OPT_DOUBLE(a, v)		double a;
 
@@ -166,4 +166,3 @@ EXTERN struct config_vars config;
 
 // end
 #endif
-

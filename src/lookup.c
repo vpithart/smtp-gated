@@ -1,12 +1,12 @@
 /*
  *	lookup.c
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -163,7 +163,7 @@ static int lookup_netfilter(struct session_t *data)
 #endif
 
 #ifdef USE_NAT_TPROXY
-/* 
+/*
 	if we use lookup_netfilter code for tproxy, we get:
 	NEW (1/0) on=m.t.a.1:25, src=62.*.*.*:1708, ident=, dst=m.t.a.1:25, id=1277124162.30108
 	so if local IP is spoofed, then it should be enough to just use local IP:PORT as target MTA
@@ -188,7 +188,7 @@ static int lookup_getsockname(struct session_t *data)
 	data->target.sin_family = AF_INET;
 	size = (socklen_t) sizeof(data->target);
 
-	if (getsockname(data->client, (struct sockaddr *) &data->target, &size) != 0) 
+	if (getsockname(data->client, (struct sockaddr *) &data->target, &size) != 0)
 		return -1;
 
 	snprintf(data->target_str, sizeof(data->target_str), "%s", inet_ntoa(data->target.sin_addr));
@@ -300,7 +300,7 @@ static int lookup_ipfilter(struct session_t *data)
 	data->target.sin_family = AF_INET;
 	data->target.sin_port = natlookup.nl_realport;
 	data->target.sin_addr = natlookup.nl_realip;
-	
+
 	snprintf(data->target_str, sizeof(data->target_str), "%s", inet_ntoa(data->target.sin_addr));
 	TERMINATE_STRING(data->target_str);
 
@@ -357,7 +357,7 @@ static int lookup_remote(struct session_t *data)
 #warning 2. in #if above
 #error Both of them must much IDENT_SIZE!
 #endif
-	res = sscanf(buf, "%d , %d : ORIGIN : %d.%d.%d.%d : %d : %20s", 
+	res = sscanf(buf, "%d , %d : ORIGIN : %d.%d.%d.%d : %d : %20s",
 		&rport, &lport, &ip1, &ip2, &ip3, &ip4, &target_port, ident_tmp);
 
 	untaint(buf, sizeof(buf));
@@ -368,7 +368,7 @@ static int lookup_remote(struct session_t *data)
 	if ((rport != client_port) || (lport != local_port) ||
 		(target_port < 0) || (target_port > 65535) ||
 		(ip1 < 0) || (ip1 > 255) || (ip2 < 0) || (ip2 > 255) ||
-		(ip3 < 0) || (ip3 > 255) || (ip4 < 0) || (ip3 > 255)) 
+		(ip3 < 0) || (ip3 > 255) || (ip4 < 0) || (ip3 > 255))
 		goto lookup_mismatch;
 
 	res = snprintf(data->target_str, sizeof(data->target_str), "%d.%d.%d.%d", ip1, ip2, ip3, ip4);
@@ -470,7 +470,7 @@ static int lookup_remote_udp(struct session_t *data)
 			goto fail;
 		}
 #endif
-	
+
 		FD_ZERO(&rfds);
 		FD_SET(sock, &rfds);
 		tv.tv_sec = config.timeout_lookup;
@@ -528,7 +528,7 @@ static int lookup_remote_udp(struct session_t *data)
 
 //	if (orig_len != sizeof(response)) return LOOKUP_MISMATCH;
 	if (query.version != response.version) return LOOKUP_MISMATCH;
-	
+
 	if ((ntohs(response.flags) & PH_TYPE) != PH_TYPE_REPLY) return LOOKUP_MISMATCH;
 	if ((ntohs(response.flags) & PH_RESULT) != PH_RESULT_FOUND) return LOOKUP_NOTFOUND;
 //	res = memcmp(&query, &response, ((size_t) &query.dst) - ((size_t) &query));
@@ -647,6 +647,3 @@ int target_lookup(struct session_t *data)
 
 	return 1;
 } /* target_lookup() */
-
-
-

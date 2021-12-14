@@ -1,12 +1,12 @@
 /*
  *	conffile.h
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -88,8 +88,8 @@ typedef enum {
 	CONFIG_END = 0,
 	// boolean: 0, 1, yes, no, on, off
 	CONFIG_BOOL,
-	// signed integer: 
-	CONFIG_INT, 
+	// signed integer:
+	CONFIG_INT,
 	// tcp/udp port:
 	CONFIG_PORT,
 	// unsigned integer:
@@ -97,7 +97,7 @@ typedef enum {
 	// arbitrary string:
 	CONFIG_STR,
 	// dotted IP address:
-	CONFIG_IP4, 
+	CONFIG_IP4,
 	// double floating-point number:
 	CONFIG_DOUBLE,
 	// enumeration (string=>int, string=>int, NULL):
@@ -154,5 +154,3 @@ EXTERN int dump_config_by_name(char *name, struct config_option config_options[]
 #undef EXTERN
 
 #endif
-
-

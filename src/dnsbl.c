@@ -1,12 +1,12 @@
 /*
  * 	dnsbl.c
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -52,7 +52,7 @@ int dnsbl_parse()
 
 	for (i = 0; i < MAX_DNSBL_HOSTS; i++)
 		FREE_NULL(dnsbl_host_list[i]);
-	
+
 	if (EMPTY_STRING(config.dnsbl))
 		return 0;
 
@@ -98,7 +98,7 @@ int dnsbl_check(struct session_t *data)
 
 		snprintf(domain, sizeof(domain), "%d.%d.%d.%d.%s", NIPQUAD_REV(data->origin.sin_addr.s_addr), dnsbl);
 		TERMINATE_STRING(domain);
-		
+
 		if ((host = gethostbyname(domain)) == NULL) {
 			switch (h_errno) {
 				case HOST_NOT_FOUND:
@@ -112,19 +112,19 @@ int dnsbl_check(struct session_t *data)
 					continue;
 			}
 		}
-	
+
 		if (host->h_addrtype != AF_INET || host->h_length != 4) {
 			log_action(LOG_WARNING, "DNSBL:FAIL gethostbyname(): h_addrtype=%d, h_length=%d\n", host->h_addrtype, host->h_length);
 			return 0;
 		}
-	
+
 		if (host->h_addr_list[0] == NULL) {
 			log_action(LOG_WARNING, "DNSBL:FAIL gethostbyname(): h_addr_list == NULL\n");
 			return 0;
 		}
-	
+
 		answer = *((uint32_t *) host->h_addr_list[0]);
-	
+
 		asprintf(&data->message, "DNSBL: %s: %d.%d.%d.%d", dnsbl, NIPQUAD(answer));
 		log_action(LOG_INFO, "DNSBL:FOUND domain=%s, answer=%d.%d.%d.%d\n", domain, NIPQUAD(answer));
 		return 1;
@@ -132,5 +132,3 @@ int dnsbl_check(struct session_t *data)
 
 	return 0;
 }
-
-

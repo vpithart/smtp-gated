@@ -15,27 +15,27 @@ What does it do, and what does it not:
   SMTP data transmission
 - Supports STARTTLS and PIPELINING (SMTP CHUNKING from RFC3030 will also
   be available some day)
-- Umoøliwia zbudowanie farmy 'skanerÛw' (wymaga to spatchowanego oidentd,
-byÊ moøe wkrÛtce wprowadzÍ jakie∂ prostsze rozwi±zanie), dla jednego b±dº
-kilku routerÛw. (*)
-- Umoøliwia wstawianie w nag≥Ûwku informacji o ºrÛd≥owym IP (i ewentualnie
+- Umo≈ºliwia zbudowanie farmy 'skaner√≥w' (wymaga to spatchowanego oidentd,
+byƒá mo≈ºe wkr√≥tce wprowadzƒô jakie≈õ prostsze rozwiƒÖzanie), dla jednego bƒÖd≈∫
+kilku router√≥w. (*)
+- Umo≈ºliwia wstawianie w nag≈Ç√≥wku informacji o ≈∫r√≥d≈Çowym IP (i ewentualnie
 idencie - patrz punkt poprzedni)
-- Dzia≥a z kilkoma platformami obs≥uguj±cymi NAT.
-- Ma bardzo fajny podgl±d w to co siÍ aktualnie dzieje ;)
-- Umoøliwia wprowadzenie ograniczeÒ na ilo∂Ê sesji: wszystkich, per IP
+- Dzia≈Ça z kilkoma platformami obs≈ÇugujƒÖcymi NAT.
+- Ma bardzo fajny podglƒÖd w to co siƒô aktualnie dzieje ;)
+- Umo≈ºliwia wprowadzenie ogranicze≈Ñ na ilo≈õƒá sesji: wszystkich, per IP
 (ewentualnie per ident - patrz punkt *)
-- Odrzucanie po≥±czeÒ przy wysokim loadavg (z komunikatem)
-- Ograniczenie skanowania do przesy≥ek mniejszych niø administrator sobie
-zaøyczy
-- WspÛ≥praca z clamav oraz mksd (to drugie nie testowane od jakiego∂ czasu)
-- Umoøliwia skanowaniem spamassasinem kaødej przesy≥ki (rezultaty l±duj± w
+- Odrzucanie po≈ÇƒÖcze≈Ñ przy wysokim loadavg (z komunikatem)
+- Ograniczenie skanowania do przesy≈Çek mniejszych ni≈º administrator sobie
+za≈ºyczy
+- Wsp√≥≈Çpraca z clamav oraz mksd (to drugie nie testowane od jakiego≈õ czasu)
+- Umo≈ºliwia skanowaniem spamassasinem ka≈ºdej przesy≈Çki (rezultaty lƒÖdujƒÖ w
 syslogu).
-- Dla kaødego po≥±czenia tworzy nowy proces
-- (obecnie) Nie obs≥uguje akcji w wypadku napotkania wirusa; do klienta
-dociera wy≥±cznie komunikat o jego napotkaniu. W przygotowaniu jest blokada
+- Dla ka≈ºdego po≈ÇƒÖczenia tworzy nowy proces
+- (obecnie) Nie obs≈Çuguje akcji w wypadku napotkania wirusa; do klienta
+dociera wy≈ÇƒÖcznie komunikat o jego napotkaniu. W przygotowaniu jest blokada
 czasowa dla takiego osobnika.
-- Nie ma zbyt uporz±dkowanego kodu ;]
-- Brak szczegÛlnej dokumentacji
+- Nie ma zbyt uporzƒÖdkowanego kodu ;]
+- Brak szczeg√≥lnej dokumentacji
 
 
 Wbrew pozorom nie ma (narazie) supportu dla PostgreSQL.
@@ -68,6 +68,10 @@ iptables-devel.
 
    Be careful! "--enable-chunking" *is* broken, so you don't want to
    enable it.
+
+   Support dla mksd jest w≈ÇƒÖczany, je≈õli configure znajdzie plik z nag≈Ç√≥wkami
+   libmksd.h (np. w /usr/include). Do pe≈Çni szczƒô≈õcia potrzebny jest tak≈ºe
+   libmksd.a dostƒôpny w katalogu z bibliotekami (np. /usr/lib/).
 
 2. Installation (/usr/local/sbin by default)
 
@@ -174,6 +178,9 @@ KONFIGURACJA / CONFIGURATION
 	iptables -t nat -A PREROUTING -p tcp --dport 25
 		-i eth1 -s 192.168.1.0/24 -j DNAT --to ip_proxy:port_proxy
 
+	Oczywi≈õcie powyzsza wersja jest najprostsza z mozliwych.
+	Nalezy ja dostosowac do wlasnej konfiguracji.
+
 5b. Przekierowanie ipfw (FreeBSD)
 
 	ipfw add 10 fwd ip_proxy,port_proxy
@@ -187,6 +194,9 @@ KONFIGURACJA / CONFIGURATION
 
 	/etc/rc.d/init.d/smtp-gated status
 
+7. Do testowania mozesz uzyc sygnatury testowej Eicar dostepnej pod adresem
+   http://www.eicar.com/anti_virus_test_file.htm
+
 
 UWAGA!
    Jesli dzieje sie cos nie halo i nie wiadomo o co chodzi - w pierwszej
@@ -199,11 +209,30 @@ UWAGA!
    Sprobuj tez wywolac smtp-gated -t /etc/plik_konfiguracyjny i przejrzyj
    wyniki.
 
+WSPARCIE DLA MKSD / MKSD SCANNER SUPPORT
+----------------------------------------
+
+Aby u≈ºywaƒá mksd nale≈ºy najpierw skompilowaƒá bibliotekƒô libmksd (jest w pakiecie
+dystrybucyjnym mksd w archiwum src.tgz, nale≈ºy go rozpakowaƒá i w katalogu inne/
+wykonaƒá make). Dwa pliki, tj. libmksd.h oraz libmksd.a nale≈ºy przekopiowaƒá do
+katalogu src/ ≈∫r√≥de≈Ç smtp-gated. Nastƒôpnie nale≈ºy wywo≈Çaƒá:
+
+	./configure --enable-mksd
+
+(ewentualnie z dodatkowymi parametrami). Po poprawnym skompilowaniu, wsparcie
+dla mksd mo≈ºna sprawdziƒá w dyrektywach wy≈õwietlanych przez:
+
+	smtp-gated -V
+
 
 BEZPIECZENSTWO / SECURITY
 -------------------------
 
-1. Nalezy wziac pod uwage fakt, iz nie zabezpieczony smtp-gated (czyli w
+1. Nigdy, przenigdy, nie uruchamiaj proxy z prawami roota w srodowisku
+   produkcyjnym. Jesli probujesz to robic, to znaczy, ze powinienes najpierw
+   poczytac jakas chocby najmarniejsza ksiazeczke o administracji Unixami.
+
+2. Nalezy wziac pod uwage fakt, iz nie zabezpieczony smtp-gated (czyli w
    domyslnej konfiguracji) bedzie open-relay-em (czyli de facto pomaga
    spamerom i wirusom). Rozwiazaniem tego problemu moga byc:
 
@@ -222,11 +251,11 @@ BEZPIECZENSTWO / SECURITY
    b) Ustawienie bind_address na 127.0.0.1 lub na adres interfejsu sieci
       wewnetrznej.
 
-2. Na wiekszosci systemow porty od 1024 w zwyz, moga byc uzywane przez dowolnego
+3. Na wiekszosci systemow porty od 1024 w zwyz, moga byc uzywane przez dowolnego
    uzytkownika. Nie nalezy wiec ich uzywac na serwerze z publicznym dostepem do
    shella. Nalezy wtedy zmienic "port" na dowolny nieuzywany, ponizej 1024.
- 
-3. Wszystkie wiadomosci sa przechowywane w plikach tymczasowych. Nalezy
+
+4. Wszystkie wiadomosci sa przechowywane w plikach tymczasowych. Nalezy
    ograniczyc do nich dostep dla innych uzytkownikow. Dostep musi byc jednak
    zapewniony dla ClamAV i ewentualnie SpamAssassina. Najlatwiej to uzyskac
    ustawiajac odpowiednie grupy dla procesow.
@@ -243,7 +272,7 @@ Jesli uzywasz programu powyzej miesiaca, chetnie sie dowiem o jego
 stabilnosci. Tym chetniej im bedzie ona nizsza ;) Wszelkie tego typu
 informacje prosze na maila, wraz z gzip-owanym logiem.
 
-Adres: smtp-proxy {ma≥pa} klolik {kropka} org
+Adres: smtp-proxy {ma≈Çpa} klolik {kropka} org
 
 
 PODZIEKOWANIA / THANKS TO
@@ -254,7 +283,3 @@ Kolejnosc przypadkowa :)
 Dla Grzegorza Janoszki za zgloszenie kilku niedorobek.
 Dla Bartosza Kuzmy za wsparcie dla IPFilter w NetBSD
 (oryginal w contrib/ipfilter.diff)
-
-
-: vim: set textwidth=80 tabstop=4 shiftwidth=4 :
-

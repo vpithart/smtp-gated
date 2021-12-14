@@ -1,12 +1,12 @@
 /*
  * 	md5.c (RFC1321)
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -222,14 +222,14 @@ static inline void block_to_le(uint32_t *dst, uint32_t *src, int len)
 		*dst = SWAP32(*src);
 		dst++;
 		src++;
-	}	
+	}
 }
 static inline void block_to_le_inplace(uint32_t *ptr, int len)
 {
 	for(; len>0; len--) {
 		*ptr = SWAP32(*ptr);
 		ptr++;
-	}	
+	}
 }
 #endif
 
@@ -257,25 +257,25 @@ static void md5_block(uint32_t state[4], uint32_t x[16])
 
 	/* round 1 */
 	R1(a, b, c, d, x,  1); R1(d, a, b, c, x,  2); R1(c, d, a, b, x,  3); R1(b, c, d, a, x,  4);
-	R1(a, b, c, d, x,  5); R1(d, a, b, c, x,  6); R1(c, d, a, b, x,  7); R1(b, c, d, a, x,  8); 
-	R1(a, b, c, d, x,  9); R1(d, a, b, c, x, 10); R1(c, d, a, b, x, 11); R1(b, c, d, a, x, 12); 
-	R1(a, b, c, d, x, 13); R1(d, a, b, c, x, 14); R1(c, d, a, b, x, 15); R1(b, c, d, a, x, 16); 
+	R1(a, b, c, d, x,  5); R1(d, a, b, c, x,  6); R1(c, d, a, b, x,  7); R1(b, c, d, a, x,  8);
+	R1(a, b, c, d, x,  9); R1(d, a, b, c, x, 10); R1(c, d, a, b, x, 11); R1(b, c, d, a, x, 12);
+	R1(a, b, c, d, x, 13); R1(d, a, b, c, x, 14); R1(c, d, a, b, x, 15); R1(b, c, d, a, x, 16);
 	/* round 2 */
-	R2(a, b, c, d, x, 17); R2(d, a, b, c, x, 18); R2(c, d, a, b, x, 19); R2(b, c, d, a, x, 20); 
-	R2(a, b, c, d, x, 21); R2(d, a, b, c, x, 22); R2(c, d, a, b, x, 23); R2(b, c, d, a, x, 24); 
-	R2(a, b, c, d, x, 25); R2(d, a, b, c, x, 26); R2(c, d, a, b, x, 27); R2(b, c, d, a, x, 28); 
-	R2(a, b, c, d, x, 29); R2(d, a, b, c, x, 30); R2(c, d, a, b, x, 31); R2(b, c, d, a, x, 32); 
+	R2(a, b, c, d, x, 17); R2(d, a, b, c, x, 18); R2(c, d, a, b, x, 19); R2(b, c, d, a, x, 20);
+	R2(a, b, c, d, x, 21); R2(d, a, b, c, x, 22); R2(c, d, a, b, x, 23); R2(b, c, d, a, x, 24);
+	R2(a, b, c, d, x, 25); R2(d, a, b, c, x, 26); R2(c, d, a, b, x, 27); R2(b, c, d, a, x, 28);
+	R2(a, b, c, d, x, 29); R2(d, a, b, c, x, 30); R2(c, d, a, b, x, 31); R2(b, c, d, a, x, 32);
 	/* round 3 */
-	R3(a, b, c, d, x, 33); R3(d, a, b, c, x, 34); R3(c, d, a, b, x, 35); R3(b, c, d, a, x, 36); 
-	R3(a, b, c, d, x, 37); R3(d, a, b, c, x, 38); R3(c, d, a, b, x, 39); R3(b, c, d, a, x, 40); 
-	R3(a, b, c, d, x, 41); R3(d, a, b, c, x, 42); R3(c, d, a, b, x, 43); R3(b, c, d, a, x, 44); 
-	R3(a, b, c, d, x, 45); R3(d, a, b, c, x, 46); R3(c, d, a, b, x, 47); R3(b, c, d, a, x, 48); 
+	R3(a, b, c, d, x, 33); R3(d, a, b, c, x, 34); R3(c, d, a, b, x, 35); R3(b, c, d, a, x, 36);
+	R3(a, b, c, d, x, 37); R3(d, a, b, c, x, 38); R3(c, d, a, b, x, 39); R3(b, c, d, a, x, 40);
+	R3(a, b, c, d, x, 41); R3(d, a, b, c, x, 42); R3(c, d, a, b, x, 43); R3(b, c, d, a, x, 44);
+	R3(a, b, c, d, x, 45); R3(d, a, b, c, x, 46); R3(c, d, a, b, x, 47); R3(b, c, d, a, x, 48);
 	/* round 4 */
-	R4(a, b, c, d, x, 49); R4(d, a, b, c, x, 50); R4(c, d, a, b, x, 51); R4(b, c, d, a, x, 52); 
-	R4(a, b, c, d, x, 53); R4(d, a, b, c, x, 54); R4(c, d, a, b, x, 55); R4(b, c, d, a, x, 56); 
-	R4(a, b, c, d, x, 57); R4(d, a, b, c, x, 58); R4(c, d, a, b, x, 59); R4(b, c, d, a, x, 60); 
-	R4(a, b, c, d, x, 61); R4(d, a, b, c, x, 62); R4(c, d, a, b, x, 63); R4(b, c, d, a, x, 64); 
-	
+	R4(a, b, c, d, x, 49); R4(d, a, b, c, x, 50); R4(c, d, a, b, x, 51); R4(b, c, d, a, x, 52);
+	R4(a, b, c, d, x, 53); R4(d, a, b, c, x, 54); R4(c, d, a, b, x, 55); R4(b, c, d, a, x, 56);
+	R4(a, b, c, d, x, 57); R4(d, a, b, c, x, 58); R4(c, d, a, b, x, 59); R4(b, c, d, a, x, 60);
+	R4(a, b, c, d, x, 61); R4(d, a, b, c, x, 62); R4(c, d, a, b, x, 63); R4(b, c, d, a, x, 64);
+
 	state[0] += a;
 	state[1] += b;
 	state[2] += c;
@@ -393,7 +393,7 @@ char* md5_base64(void* data, size_t len)
 
 	if (!data) return NULL;
 
-	memset(hash, '\0', sizeof(hash));	
+	memset(hash, '\0', sizeof(hash));
 	md5(buf32, data, len);
 
 	for (i=5;; i--) {
@@ -412,12 +412,12 @@ char* md5_base64(void* data, size_t len)
 		*pos = base64[( (*buf8 & 0x0f) << 2) |  ((buf8[1] >> 6))];
 		pos++;
 		buf8++;
-		
+
 		*pos = base64[*buf8 & 0x3f];
 		pos++;
 		buf8++;
 	}
-	
+
 	hash[sizeof(hash)-1] = '\0';
 	return hash;
 }
@@ -435,11 +435,11 @@ char* md5_string_base64(char* str)
 #ifdef MD5_TEST
 
 char *test_strings[] = {
-	"d41d8cd98f00b204e9800998ecf8427e", "", 
-	"0cc175b9c0f1b6a831c399e269772661", "a", 
-	"900150983cd24fb0d6963f7d28e17f72", "abc", 
-	"f96b697d7cb7938d525a2f31aaf161d0", "message digest", 
-	"c3fcd3d76192e4007dfb496cca67e13b", "abcdefghijklmnopqrstuvwxyz", 
+	"d41d8cd98f00b204e9800998ecf8427e", "",
+	"0cc175b9c0f1b6a831c399e269772661", "a",
+	"900150983cd24fb0d6963f7d28e17f72", "abc",
+	"f96b697d7cb7938d525a2f31aaf161d0", "message digest",
+	"c3fcd3d76192e4007dfb496cca67e13b", "abcdefghijklmnopqrstuvwxyz",
 	"d174ab98d277d9f5a5611c2c9f419d9f", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
 	"57edf4a22be3c955ac49da2e2107b67a", "12345678901234567890123456789012345678901234567890123456789012345678901234567890",
 	"f40a0ec3fbf6cf062c9faf3752bd6e6c", "123456789012345678901234567890123456789012345678901234",
@@ -483,7 +483,7 @@ int main(int argc, char* argv[])
 #else
 	endianess = "big-endian";
 #endif
-	
+
 	if (argc < 2) {
 		printf("Usage: %s [ -t | STRING ]\n\n", argv[0]);
 		printf("Machine endianess: %s\n", endianess);
@@ -501,4 +501,3 @@ int main(int argc, char* argv[])
 }
 
 #endif
-

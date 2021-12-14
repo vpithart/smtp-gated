@@ -1,12 +1,12 @@
 /*
  * 	spf.c
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -126,7 +126,7 @@ spf_result spf_check(struct session_t *data, char* mailfrom)
 		log_action(LOG_DEBUG, "SPF_server_new failed");
 		goto out;
 	}
-	
+
 	if ((spf_request = SPF_request_new(spf_server)) == NULL) {
 		log_action(LOG_DEBUG, "SPF_request_new failed");
 		goto out;
@@ -137,13 +137,13 @@ spf_result spf_check(struct session_t *data, char* mailfrom)
 		log_action(LOG_DEBUG, "SPF_server_set_rec_dom error[%d]: %s", res, SPF_strerror(res));
 		goto out;
 	}
-	
+
 //	log_action(LOG_DEBUG, "spf:ip %d.%d.%d.%d", NIPQUAD(ip));
 	if ((res = SPF_request_set_ipv4(spf_request, ip))) {
 		log_action(LOG_DEBUG, "SPF_request_set_ipv4 error[%d]: %s", res, SPF_strerror(res));
 		goto out;
 	}
-	
+
 //	log_action(LOG_DEBUG, "spf:helo %s", data->helo);
 	if ((res = SPF_request_set_helo_dom(spf_request, (data->helo) ? data->helo : ""))) {
 		log_action(LOG_DEBUG, "SPF_request_set_helo_dom failed[%d]: %s", res, SPF_strerror(res));
@@ -166,7 +166,7 @@ spf_result spf_check(struct session_t *data, char* mailfrom)
 		log_action(LOG_DEBUG, "SPF_request_query_mailfrom error[%d]: %s", res, SPF_strerror(res));
 		goto out;
 	}
-	
+
 	res = SPF_response_result(spf_response);
 	log_action(LOG_DEBUG, "SPF:%s ip=%d.%d.%d.%d, helo=%s, from=%s",
 		SPF_strresult(res), NIPQUAD(ip), data->helo, mailfrom);
@@ -203,5 +203,3 @@ out:
 	if (spf_server) SPF_server_free(spf_server);
 	return ret;
 }
-
-

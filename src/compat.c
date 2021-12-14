@@ -1,12 +1,12 @@
 /*
  *	compat.c
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -116,7 +116,7 @@ int asprintf(char **ptr, const char *format, ...)
 	va_start(ap, format);
 	res = vasprintf(ptr, format, ap);
 	va_end(ap);
-	
+
 	return res;
 }
 #endif
@@ -139,7 +139,7 @@ int vasprintf(char **ptr, const char *format, va_list args)
 		res = vsnprintf(*ptr, size, format, args);
 
 		/* written up to size-1 characters (excluding '\0') => OK
-		 * (res == size) means that there was not enough room 
+		 * (res == size) means that there was not enough room
 		 * for terminating '\0' */
 		if (res < size) break;
 
@@ -178,4 +178,3 @@ int getloadavg(double *list, int nelem)
 	return -1;
 }
 #endif
-

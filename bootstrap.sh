@@ -20,5 +20,3 @@ run aclocal
 run autoheader
 run automake -a
 run autoconf
-
-

@@ -1,12 +1,12 @@
 /*
  *	smtp-gated.h
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -168,9 +168,9 @@ typedef enum {
 */
 typedef enum {
 	FOUND_NONE = 0,
-	FOUND_VIRUS, 
-	FOUND_SPAM, 
-	FOUND_MAX_HOST, 
+	FOUND_VIRUS,
+	FOUND_SPAM,
+	FOUND_MAX_HOST,
 	FOUND_MAX_IDENT,
 	FOUND_DNSBL,
 	FOUND_SPF,
@@ -285,19 +285,19 @@ struct session_t {
 
 	struct sockaddr_in origin;	// source (client/NAT) address+port
 	char origin_str[16];		// source (client/NAT) IP text-address
-	
+
 	struct sockaddr_in target;	// target (SMTP server) address+port
 	char target_str[16];		// target (SMTP server) IP text-address
 
 	struct sockaddr_in local;	// source -> local address data
 //	char local_str[16];		// local IP text-address
-	
+
 	// buffers
 	char *cli_buf;			// bufor danych od klienta
 	char *srv_buf;			// bufor danych z serwera
 	int cli_size;			// ilosc danych w buforach
 	int srv_size;
-	
+
 	int command_pos_client;		// queue position for client
 	int command_pos_server;		// queue position for server
 	int pipeline_size;		// session allocated pipeline size
@@ -383,7 +383,7 @@ struct scoreboard_t {
 	uint32_t dst;
 	size_t cli_rx, srv_rx;
 	size_t transaction;
-	
+
 	int ident_ok;
 	char ident[IDENT_SIZE+1];
 #endif
@@ -552,5 +552,3 @@ EXTERN char* compile_date();
 #undef EXTERN
 
 #endif
-
-

@@ -1,12 +1,12 @@
 /*
  * 	util.c
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -185,7 +185,7 @@ int connect_host_tproxy(struct sockaddr_in dst, int dst_port,
 	itp.v.flags = ITP_CONNECT;
 	if (setsockopt(sock, IPPROTO_IP, IP_TPROXY, &itp, sizeof(itp)) == -1)
 		goto fail;
-	
+
 	dst.sin_family = AF_INET;
 	dst.sin_port = htons(dst_port);
 	if (connect(sock, (struct sockaddr *) &dst, sizeof(dst)) == -1)
@@ -274,18 +274,18 @@ int connect_path(char *path)
 		errno = EINVAL;
 		return -1;
 	}
-	
+
 	sock = -1;
 
 	if (path[0] == '/') {
 		if ((sock = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
 			goto fail;
 		}
-	
+
 		us.sun_family = AF_UNIX;
 		strncpy(us.sun_path, path, sizeof(us.sun_path));
 		TERMINATE_STRING(us.sun_path);
-		
+
 		if (connect(sock, (struct sockaddr*) &us, sizeof(us)) == -1) {
 			goto fail;
 		}
@@ -310,7 +310,7 @@ int connect_path(char *path)
 			errno = ERANGE;
 			goto fail;
 		}
-		
+
 		sin.sin_family = AF_INET;
 		sin.sin_port = htons(port);
 
@@ -350,7 +350,7 @@ int setup_socket_in(int proto, in_addr_t ip, int port, int backlog, int socket_o
 		errno = EINVAL;
 		return -1;
 	}
-	
+
 	if ((fd = socket(PF_INET, (proto == IPPROTO_TCP) ? SOCK_STREAM : SOCK_DGRAM, proto)) == -1) {
 		log_action(LOG_CRIT, "socket(): %s", strerror(errno));
 		return -1;
@@ -637,11 +637,11 @@ void log_action(int prio, char* format, ...)
 	if (foreground || IS_FLAG_SET(prio, LOG_TERMINAL)) {
 		// does fprintf return -1 and set errno?
 		fprintf(stderr, "[%d] ", getpid());
-	
+
 		va_start(ap, format);
 		vfprintf(stderr, format, ap);
 		va_end(ap);
-	
+
 		fprintf(stderr, "\n");
 	} else {
 		va_start(ap, format);
@@ -688,7 +688,7 @@ void* shmalloc(size_t size, int *id)
 		return NULL;
 	}
 */
-	
+
 	return ptr;
 } /* shmalloc() */
 
@@ -762,7 +762,7 @@ int is_load_above(double max, /*@null@*/ double *current)
 
 	if (current != NULL) *current = load[0];
 	if (max <= 0) return 0;
-	
+
 	if (load[0] > max) return 1;
 	return 0;
 } /* is_load_above() */
@@ -840,7 +840,7 @@ char* alloc_msg_mail(char *line, int len)
 		case '\t':
 			buf[i] = '\0';
 			goto quit;
-		default: 
+		default:
 			/* do not untaint here, just copy */
 			buf[i] = c;
 		}
@@ -877,7 +877,7 @@ char* alloc_str_crlf(char *line, int len)
 			buf[i] = c;
 		}
 	}
-	
+
 quit:
 	TERMINATE_STRING(buf);
 	return strdup(buf);
@@ -893,7 +893,7 @@ int cat(char *fn)
 		fprintf(stderr, "open(%s) error: %s\n", fn, strerror(errno));
 		return -1;
 	}
-	
+
 	for (;;) {
 		if ((size = read(fd, buf, sizeof(buf))) == -1) {
 			if (errno == EINTR) continue;
@@ -1213,4 +1213,3 @@ int main()
 	return 1;
 }
 #endif
-

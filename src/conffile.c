@@ -1,12 +1,12 @@
 /*
  *	conffile.c
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -81,11 +81,11 @@ int config_set_defaults(struct config_option config_options[])
 		case CONFIG_ENUM:
 			*((int *) option->val) = option->def.i;
 			break;
-			
+
 		case CONFIG_DOUBLE:
 			*((double *) option->val) = option->def.d;
 			break;
-			
+
 		case CONFIG_IP4:
 			// if (!inet_aton(option->def.s, NULL) && !EMPTY_STRING(option->def.s)) {
 			if (!EMPTY_STRING(option->def.s) && !inet_aton(option->def.s, NULL)) {
@@ -93,7 +93,7 @@ int config_set_defaults(struct config_option config_options[])
 				return -101;
 			}
 			/* no-break */
-		case CONFIG_STR: 
+		case CONFIG_STR:
 			if (*((char **) option->val)) free(*((char **) option->val));
 			*((char **)option->val) = strdup(option->def.s);
 			if (!*((char **) option->val)) {
@@ -154,7 +154,7 @@ static int find_enum_value(struct config_option *option, char *name)
 			*next++ = '\0';
 			while (*next == ' ' || *next == '\t') next++;
 		}
-		
+
 		for (list = option->specific; list->name != NULL; list++) {
 			if (strcmp(list->name, current) != 0) continue;
 
@@ -188,7 +188,7 @@ static void print_enum_name(struct config_option *option, int value)
 	} else {
 		for (list = option->specific; list->name != NULL; list++) {
 			if (list->value != value) continue;
-			
+
 			printf("%s", list->name);
 			return;
 		}
@@ -209,19 +209,19 @@ static int parse_value(struct config_option *option, char *string)
 	int res;
 
 	if (IS_FLAG_CLEARED(option->flags, CONF_FLAG_EMPTY) && EMPTY_STRING(string)) return -1;
-	
+
 	switch (option->type) {
 	case CONFIG_INT:
 	case CONFIG_UINT:
 		res = sscanf(string, "%i", (int *) option->val);
 		if (res != 1) return -1;
 		break;
-		
+
 	case CONFIG_DOUBLE:
 		res = sscanf(string, "%lf", (double *) option->val);
 		if (res != 1) return -1;
 		break;
-		
+
 	case CONFIG_IP4:
 		if (!inet_aton(string, NULL)) return -1;
 		// copy
@@ -230,7 +230,7 @@ static int parse_value(struct config_option *option, char *string)
 		*((char **)option->val) = strdup(string);
 		if (!*((char **) option->val)) return -1;
 		break;
-		
+
 	case CONFIG_PORT:
 		if (IS_FLAG_SET(option->flags, CONF_FLAG_MINUS_1) && (strcmp(string, "-1") == 0)) {
 			*((int *) option->val) = -1;
@@ -302,7 +302,7 @@ int read_config(struct config_option config_options[], char *filename)
 		line++;
 
 		// skip white space(s)
-		for (name=buf; *name==' ' || *name=='\t'; name++); 
+		for (name=buf; *name==' ' || *name=='\t'; name++);
 
 		// skip comments and empty lines
 		if ((name[0] == '\0') || (name[0] == '#') || (name[0] == ';') ||
@@ -330,7 +330,7 @@ int read_config(struct config_option config_options[], char *filename)
 			return -2;
 		}
 
-		
+
 		// skip white space(s) to value position
 		while (*value==' ' || *value=='\t') value++;
 
@@ -394,7 +394,7 @@ void dump_config_var(struct config_option *option, int verbose)
 	case CONFIG_BOOL:
 		CONF_SS(option->name, (*((int *) option->val)) ? "yes" : "no");
 		break;
-		
+
 	case CONFIG_INT:
 	case CONFIG_PORT:
 		CONF_II(option->name, *((int *) option->val));
@@ -405,11 +405,11 @@ void dump_config_var(struct config_option *option, int verbose)
 		case CONF_FLAG_HEX:
 			CONF_HH(option->name, *((uint *) option->val));
 			break;
-			
+
 		case CONF_FLAG_OCT:
 			CONF_OO(option->name, *((uint *) option->val));
 			break;
-			
+
 		case CONF_FLAG_NONE:
 		default:
 			CONF_UU(option->name, *((uint *) option->val));
@@ -475,4 +475,3 @@ int dump_config_by_name(char *name, struct config_option config_options[], int v
 	fprintf(stderr, "No such variable [%s]\n", name);
 	return -1;
 }
-

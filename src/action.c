@@ -1,12 +1,12 @@
 /*
  *	action.c
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -18,7 +18,6 @@
  *	along with this program; if not, write to the Free Software
  *	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -81,7 +80,7 @@ void user_action(struct session_t *data)
 	char spam_score[20], unixtime[12], *time, *local_ip;
 	char lock_duration[20];
 	char *arg[8], *found;
-	
+
 	if (EMPTY_STRING(config.action_script)) return;
 
 	if ((res = fork()) == -1) {
@@ -216,7 +215,3 @@ asprintf_err:
 	log_action(LOG_CRIT, "user_action:asprintf failed");
 	exit(5);
 } /* user_action() */
-
-
-
-

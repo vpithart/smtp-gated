@@ -7,12 +7,12 @@
  *	(c) Warszawa 2004-2005
  *	GNU GPL License
  *
- *	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ *	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License 
- *	as published by the Free Software Foundation; either 
- *	version 2 of the License, or (at your option) any later 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either
+ *	version 2 of the License, or (at your option) any later
  *	version.
  *
  *	This program is distributed in the hope that it will be useful,
@@ -233,7 +233,7 @@ char *config_file = NULL;
 
 int child_status = 0;
 int children = 0;
-int i_am_a_child = 0;	
+int i_am_a_child = 0;
 
 volatile sig_atomic_t force_reconfig = 0;
 volatile sig_atomic_t force_finish = 0;
@@ -414,7 +414,7 @@ int response(struct session_t *data, struct response_code resp, char *format, ..
 			errno = ETIMEDOUT;
 			return -1;
 		}
-		
+
 	       	if ((res = write(data->client, cur, len)) == -1) {
 //			if (errno == EINTR) continue;
 			return -1;
@@ -462,7 +462,7 @@ inline void restore_crlf(/*@unused@*/ char *buffer, /*@unused@*/ char *pos, char
 void queue_commandp(smtp_command_t command, struct session_t *data, pipeline_arg_t parm1, pipeline_arg_t parm2)
 {
 	struct pipeline_t *ce;
-	
+
 	assert(data->command_pos_client < data->pipeline_size);
 
 //	log_action(LOG_DEBUG, "QUEUE:QUEUE %d at %d", command, data->command_pos_client);
@@ -755,7 +755,7 @@ void child_reaper()
 		if (pid == -1) {
 			if (errno == ECHILD) break;
 			if (errno == EINTR) continue;
-			
+
 			log_action(LOG_ERR, "!ERR! wait3() returned: %s", strerror(errno));
 			break;
 		}
@@ -913,7 +913,7 @@ line_status local_callback(char* buffer, char* pos, /*@unused@*/ int size, void 
 //		fdprintf(data->client, "221 %s %s\r\n", config.proxy_name, config.msg_sign_off);
 		response(data, ER(221,0,0), "%s %s\r\n", config.proxy_name, config.msg_sign_off);
 		return LINE_CLOSED;
-	} else if ((strcasecmp(buffer, "NOOP") == 0) || 
+	} else if ((strcasecmp(buffer, "NOOP") == 0) ||
 		   (strcasecmp(buffer, "RSET") == 0)) {
 //		fdprintf(data->client, "250 OK\r\n");
 		response(data, ER(250,0,0), "OK\r\n");
@@ -995,7 +995,7 @@ void wait_for_quit(struct session_t* data, char* format, ...)
 
 	SAFE_CLOSE(data->client);
 	cleanup();
-	
+
 	if (res != LINE_EINTR) log_action(LOG_DEBUG, "CLOSE:TAKEN");
 	exit(5);
 } /* wait_for_quit() */
@@ -1114,7 +1114,7 @@ void direct_proxy(struct session_t *data, char* cause)
 	SAFE_CLOSE(data->server);
 
 	cleanup();
-	
+
 	log_action(LOG_NOTICE|LOG_ALWAYS, "CLOSE:DIRECT by=%s rcv=%d/%d, time=%" FORMAT_TIME_T ", src=%s, ident=%s",
 		line_closed_cause(res), data->cli_rx, data->srv_rx, time(NULL)-data->start_time,
 		data->origin_str, data->ident);
@@ -1145,7 +1145,7 @@ void prepare_nat_header(struct session_t *data)
 
 		return;
 	}
-		
+
 	snprintf(buf_from, sizeof(buf_from), "%s: from [%s]:%d ",
 		config.nat_header, inet_ntoa(data->origin.sin_addr), ntohs(data->origin.sin_port));
 	TERMINATE_STRING(buf_from);
@@ -1220,15 +1220,15 @@ void flush_addresses(struct session_t *data)
 			data->mail_from_logged = 1;
 			return;
 		} else {
-			log_action(LOG_INFO|LOG_ALWAYS, "MAIL FROM <%s> RCPT TO: %03d<%s>", 
+			log_action(LOG_INFO|LOG_ALWAYS, "MAIL FROM <%s> RCPT TO: %03d<%s>",
 				data->mail_from, data->rcpt_to_code[0], data->rcpt_to[0]);
 			data->mail_from_logged = 1;
-			
+
 			free(data->rcpt_to[0]);
 			data->rcpt_to[0] = data->rcpt_to[1];
 			data->rcpt_to_code[0] = data->rcpt_to_code[1];
 			data->rcpt_to[1] = NULL;
-			
+
 			data->rcpts--;
 			return;
 		}
@@ -1265,7 +1265,7 @@ void new_mail_from(struct session_t *data, char *email, int code)
 	if (data->mail_from) free(data->mail_from);
 	data->mail_from = email;
 	data->mail_from_logged = 0;
-	
+
 	if (IS_FLAG_CLEARED(config.log_mail_from, (accepted ? LOG_MAIL_ACCEPTED : LOG_MAIL_REJECTED)))
 		return;
 
@@ -1285,7 +1285,7 @@ void add_rcpt_to(struct session_t *data, char *email, int code)
 		free(email);
 		return;
 	}
-	
+
 	if (IS_FLAG_SET(config.log_rcpt_to, LOG_MAIL_BASE64)) {
 		tmp = strdup(md5_string_base64(email));
 		free(email);
@@ -1509,7 +1509,7 @@ handle_status_t handle_mail_from(struct session_t *data, char* buffer)
 					break;
 				case SPF_FAIL:
 					SHARED_STATS_INC(spf);
-					
+
 					fdprintf(data->server, "QUIT\r\n");
 					SAFE_CLOSE(data->server);
 
@@ -1693,7 +1693,7 @@ line_status client_callback(char *buffer, char *pos, int size, void *ptr)
 			h_status = handle_data_finished(data, buffer);
 		} else {
 			if (data->data_going == GOING_HEADER) {
-				// ... header 
+				// ... header
 				if (buffer[0] == '\0') {
 					// empty line => message header complete
 					data->data_going = GOING_BODY;
@@ -1755,7 +1755,7 @@ write_ok:
 			log_action(LOG_ERR, "client:write(%d) returned 0 (connection lost)", size);
 			return LINE_CLOSED;
 		}
-		
+
 		break;
 	}
 
@@ -1867,7 +1867,7 @@ line_status server_callback(char *buffer, char *pos, int size, void *ptr)
 
 	// odpowiedz nie bedzie kontynuowana
 	if (command != COMMAND_NONE) dequeue_command(data);
-	
+
 	// pipeline: liczenie odpowiedzi,
 	// STARTTLS,DATA jest juz synchronizowane
 	switch (command) {
@@ -1877,7 +1877,7 @@ line_status server_callback(char *buffer, char *pos, int size, void *ptr)
 				flush_addresses(data);
 				data->data_going = GOING_HEADER;
 				data->transaction++;
-				
+
 				SHARED_CONN_STATUS(transaction, data->transaction);
 				SHARED_CONN_STATUS(state, CONN_DATA);
 
@@ -1996,7 +1996,7 @@ line_status server_callback(char *buffer, char *pos, int size, void *ptr)
 				data->data_going = GOING_AUTH;
 			} else {
 				// ratelimit_uint(data, RATELIMIT_INT_AUTH_REJECTS, 1);
-				log_action(LOG_WARNING, "AUTH:REJECT [%d] src=%s, ident=%s", 
+				log_action(LOG_WARNING, "AUTH:REJECT [%d] src=%s, ident=%s",
 					code, data->origin_str, data->ident);
 				data->auth |= AUTH_FLAG_REJECTED;
 				SHARED_CONN_STATUS(auth, data->auth);
@@ -2009,7 +2009,7 @@ line_status server_callback(char *buffer, char *pos, int size, void *ptr)
 			SHARED_CONN_STATUS(state, CONN_RSET);
 			log_action(LOG_DEBUG, "RSET [%d]", code);
 			break;
-			
+
 		case COMMAND_XCLIENT:
 			log_action(LOG_DEBUG, "XCLIENT [%d]", code);
 			break;
@@ -2055,12 +2055,12 @@ write_ok:
 			log_action(LOG_ERR, "server:write(%d) error: %s", size, strerror(errno));
 			return LINE_CLOSED;
 		}
-		
+
 		if (res == 0) {
 			log_action(LOG_ERR, "server:write(%d) returned 0 (connection lost)", size);
 			return LINE_CLOSED;
 		}
-		
+
 		break;
 	}
 
@@ -2068,7 +2068,7 @@ write_ok:
 		direct_proxy(data, direct);
 		exit(0);
 	}
-	
+
 	return ret_code;
 } /* server_callback() */
 
@@ -2100,7 +2100,7 @@ void session_init_1(struct session_t *data, int client, struct sockaddr_in origi
 		default:
 			data->mode = config.mode;
 	}
-	
+
 	data->client = client;
 	data->server = -1;
 	data->origin = origin;
@@ -2197,7 +2197,7 @@ int target_connect(struct session_t *data)
 
 	SHARED_CONN_STATUS(dst, SIN_TO_UINT32(data->target.sin_addr));
 	SHARED_CONN_STATUS(state, CONN_CONNECT);
-	
+
 	inet_aton(config.outgoing_addr, &src.sin_addr);
 	SET_TIMEOUT(config.timeout_connect);
 
@@ -2273,9 +2273,9 @@ line_status bdat_chunk(struct session_t *data, int allow_read)
 {
 	int size;
 	int res;
-	
+
 	// TODO: co jesli klient da od razu "BDAT 0 LAST"?
-	
+
 	// nie mozemy zrobic od razu read(), bo moglismy tu trafic z danymi
 	// pozostalymi z fdgetline_cb() i kolejny read() moglby zablokowac
 	size = min(config.buffer_size - data->cli_size, data->bdat_togo);
@@ -2294,7 +2294,7 @@ line_status bdat_chunk(struct session_t *data, int allow_read)
 		// === if (res == 0)
 		if (!data->cli_size) return LINE_CLOSED;	// a moze blad?
 	}
-	
+
 	size = min(data->bdat_togo, data->cli_size);
 	spool_write(data, data->cli_buf, size);
 
@@ -2307,12 +2307,12 @@ line_status bdat_chunk(struct session_t *data, int allow_read)
 			log_action(LOG_ERR, "bdat_chunk:write(%d):error: %s", size, strerror(errno));
 			return LINE_CLOSED;
 		}
-		
+
 		if (res == 0) {
 			log_action(LOG_ERR, "bdat_chunk:write(%d) returned 0 (connection lost)", size);
 			return LINE_CLOSED;
 		}
-		
+
 		break;
 	}
 
@@ -2337,7 +2337,7 @@ int xclient_startup(struct session_t *data)
 	char buffer[1024], *line;
 	int temp1, temp2, xclient_support;
 	char *xclient_name;
-	
+
 	temp1 = temp2 = 0;
 	xclient_support = 0;
 	xclient_name = "[UNAVAILABLE]";
@@ -2345,7 +2345,7 @@ int xclient_startup(struct session_t *data)
 
 	// resolv data->origin.sin_addr.s_addr to xclient_name
 	// ...
-	
+
 	// read initial MTA greeting
 	SET_TIMEOUT(config.timeout_lookup);
 	if ((line = fdgetline(data->server, buffer, sizeof(buffer), &temp1, &temp2)) == NULL)
@@ -2475,9 +2475,9 @@ void connection(struct session_t *data)
 				exit(0);
 		}
 	}
-	
+
 	// log
-	log_action(LOG_NOTICE|LOG_ALWAYS, "NEW (%d/%d) on=%s:%d, src=%s:%d, ident=%s, dst=%s:%d, id=%" FORMAT_TIME_T ".%" FORMAT_PID_T, 
+	log_action(LOG_NOTICE|LOG_ALWAYS, "NEW (%d/%d) on=%s:%d, src=%s:%d, ident=%s, dst=%s:%d, id=%" FORMAT_TIME_T ".%" FORMAT_PID_T,
 		children, data->ident_count, inet_ntoa(data->local.sin_addr), ntohs(data->local.sin_port), data->origin_str, ntohs(data->origin.sin_port),
 		data->ident, data->target_str, ntohs(data->target.sin_port), data->start_time, getpid());
 
@@ -2582,9 +2582,9 @@ void connection(struct session_t *data)
 			assert(data->srv_size < config.buffer_size);
 			res = fdgetline_cb(data->server, data->srv_buf, config.buffer_size,
 				&data->srv_size, &server_callback, data, &data->srv_rx);
-			
+
 			SHARED_CONN_STATUS(srv_rx, data->srv_rx);
-			
+
 			if (res == LINE_CLOSED) {
 				res = LINE_CLOSED_SERVER;
 				break;
@@ -2696,7 +2696,7 @@ int post_config()
 #ifdef USE_NAT_TPROXY
 			if (elevate_privileges() != 0)
 				cleanup_exit(0);
-				
+
 			if (tproxy_check() != 0) {
 				log_action(LOG_CRIT, "TPROXY version mismatch or no kernel support!");
 				return 1;
@@ -2813,7 +2813,7 @@ char* chrootize_path(char *path)
 
 	snprintf(buf, sizeof(buf), "%s%s%s", config.chroot_path, EMPTY_STRING(config.chroot_path) ? "" : "/./", path);
 	TERMINATE_STRING(buf);
-	
+
 	return buf;
 } /* chrootize_path () */
 
@@ -2957,7 +2957,7 @@ int main(int argc, char* argv[])
 			dump_help();
 			exit(10);
 		case CMD_C:
-			// nie bierze pod uwagê chroot-a w przypadku ¶cie¿ek!
+			// nie bierze pod uwagï¿½ chroot-a w przypadku ï¿½cieï¿½ek!
 			i = dump_config_by_name(arg1, config_options, 0);
 			exit(i);
 		case CMD_KK:
@@ -2993,7 +2993,7 @@ int main(int argc, char* argv[])
 			fprintf(stderr, "Fatal: !BUG! unknown exec cmd [%d]\n", cmd);
 			exit(3);
 	}
-	
+
 	if (!config_file) {
 		fprintf(stderr, "Fatal: Config file not supplied.\n");
 		exit(1);
@@ -3066,7 +3066,7 @@ restart:
 		}
 		if (proxy == -1)
 			cleanup_exit(1);
-		
+
 		log_action(LOG_INFO, "SMTP-Proxy %s listening on %s:%d/TCP [queue: %d]", VERSION, config.bind_address, config.port, config.connect_queue);
 	}
 
@@ -3089,12 +3089,12 @@ restart:
 			log_action(LOG_INFO, "Reloading configuration...");
 			if (read_config(config_options, config_file) != 0) {
 				log_action(LOG_CRIT, "Error parsing configuration file...");
-				// inconsistent configuration 
+				// inconsistent configuration
 				break;
 			}
 			if (post_config() != 0) {
 				log_action(LOG_CRIT, "Invalid configuration...");
-				// inconsistent configuration 
+				// inconsistent configuration
 				break;
 			}
 			if ((config.port >= 1024) || (getuid() == 0)) {
@@ -3202,7 +3202,7 @@ restart:
 		connections[slot].src = SIN_TO_UINT32(origin.sin_addr);
 		connections[slot].start_time = time(NULL);
 #ifdef USE_SHARED_MEM
-		connections[slot].ident_ok = 
+		connections[slot].ident_ok =
 			connections[slot].dst =
 			connections[slot].cli_rx =
 			connections[slot].srv_rx =
@@ -3247,7 +3247,7 @@ restart:
 
 	SAFE_CLOSE(proxy);
 
-		
+
 	if (children) {
 		pidfile_remove(config.pidfile);
 		// hack => cleanup() nie bedzie probowal usunac ponownie
@@ -3268,7 +3268,7 @@ restart:
 			child_reaper();
 			if (!children) break;
 		}
-		
+
 		tv.tv_sec = 3;
 		tv.tv_usec = 0;
 		if (select(0, NULL, NULL, NULL, &tv) == -1 && errno != EINTR) {
@@ -3283,5 +3283,3 @@ restart:
 	cleanup();
 	exit(0);
 } /* main() */
-
-

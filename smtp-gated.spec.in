@@ -17,7 +17,7 @@ PreReq: /usr/bin/id /sbin/chkconfig
 PreReq: %{_sbindir}/useradd %{_sbindir}/groupadd
 
 
-%description 
+%description
 Transparent proxy for SMTP traffic.
 
 
@@ -99,5 +99,3 @@ fi
 
 * Thu Mar 03 2005 Bartlomiej Korupczynski <bartek@klolik.org>
 - initial version
-
-

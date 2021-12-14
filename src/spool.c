@@ -1,12 +1,12 @@
 /*
  * 	spool.c
  *
- * 	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+ * 	Copyright (C) 2004-2005 Bartï¿½omiej Korupczynski <bartek@klolik.org>
  *
- * 	This program is free software; you can redistribute it and/or 
- * 	modify it under the terms of the GNU General Public License 
- * 	as published by the Free Software Foundation; either 
- * 	version 2 of the License, or (at your option) any later 
+ * 	This program is free software; you can redistribute it and/or
+ * 	modify it under the terms of the GNU General Public License
+ * 	as published by the Free Software Foundation; either
+ * 	version 2 of the License, or (at your option) any later
  * 	version.
  *
  * 	This program is distributed in the hope that it will be useful,
@@ -101,7 +101,7 @@ int spool_create(struct session_t *data)
 	data->spool_exists = 1;
 
 	// data->time, pid procesu sa w nazwie pliku
-	res = fdprintf(data->spool_fd, "%s: src=%s:%d, ident=%s, dst=%s:%d, trns=%d\r\n", 
+	res = fdprintf(data->spool_fd, "%s: src=%s:%d, ident=%s, dst=%s:%d, trns=%d\r\n",
 		config.spool_header, data->origin_str, ntohs(data->origin.sin_port), data->ident,
 		data->target_str, ntohs(data->target.sin_port), data->transaction);
 
@@ -141,7 +141,7 @@ int spool_write(struct session_t *data, void *buffer, int size)
 				spool_remove(data);
 			break;
 		}
-		
+
 		size -= res;
 		buffer += res;
 	}
@@ -168,14 +168,14 @@ char* spool_scan(struct session_t *data)
 	int do_unlink = !IS_FLAG_SET(config.spool_leave_on, LEAVE_ON_ALWAYS);
 	char *scan_result_string = NULL;
 	char *ret = NULL;
-	
+
 
 	/*
 	 *	antivirus scanning
 	*/
 
 //	log_action(LOG_DEBUG, "about to SCAN, auth: 0x%0x", data->auth);
-	
+
 	SHARED_CONN_STATUS(state, CONN_SCAN);
 	// skanowanie, jesli jest co skanowac
 	if (data->spool_exists && (config.scan_max_size > 0) && (data->size <= config.scan_max_size)) {
@@ -252,7 +252,7 @@ char* spool_scan(struct session_t *data)
 			log_action(LOG_DEBUG, "SPAM:SKIPPED reason=auth");
 		} else if (data->spool_exists && (data->size <= config.spam_max_size)) {
 			spam_score = 0.0;
-	
+
 			scan_start = time(NULL);
 			SET_TIMEOUT(config.timeout_spam);
 			spam_res = spam_scanner(data->spool_name, &spam_score);
@@ -293,7 +293,7 @@ char* spool_scan(struct session_t *data)
 				level = LOG_ERR;
 				if (IS_FLAG_SET(config.spool_leave_on, LEAVE_ON_ERROR)) do_unlink = 0;
 			}
-	
+
 			log_action(level, "SPAM:%s size=%d, time=%d, src=%s, ident=%s, score=%f",
 				scan_result_string, data->size, scan_time, data->origin_str,
 				data->ident, spam_score);
@@ -306,4 +306,3 @@ char* spool_scan(struct session_t *data)
 	if (do_unlink) spool_remove(data);
 	return ret;
 } /* spool_scan() */
-
