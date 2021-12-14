@@ -1,0 +1,16 @@
+timeout tests [set timeout, reload, check]
+- smtp session
+- direct session
+- takeover session
+spool:
+- mkdir /tmp/smtp-gated-spool 0755
+- [run]
+- rmdir /tmp/smtp-gated-spool, jesli nie pusty to blad!
+ignore errors
+nat-header format, existance
+un-/locking test
+X-Proxy-Spool-Info format, validity
+pipeline overflow
+
+./run-test.pl -long, $set{long}
+

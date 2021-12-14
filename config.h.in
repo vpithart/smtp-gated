@@ -1,0 +1,372 @@
+/* config.h.in.  Generated from configure.in by autoheader.  */
+
+/* Define if building universal (internal helper macro) */
+#undef AC_APPLE_UNIVERSAL_BUILD
+
+/* Initial connection rejection code */
+#undef CONN_REJ_CODE
+
+/* Filter out SMTP CHUNKING extension */
+#undef FILTER_CHUNKING
+
+/* Define to 1 if you have the `accept' function. */
+#undef HAVE_ACCEPT
+
+/* Define to 1 if you have the <arpa/inet.h> header file. */
+#undef HAVE_ARPA_INET_H
+
+/* Define to 1 if you have the <arpa/nameser.h> header file. */
+#undef HAVE_ARPA_NAMESER_H
+
+/* Define to 1 if you have the `asprintf' function. */
+#undef HAVE_ASPRINTF
+
+/* Define to 1 if you have the <byteswap.h> header file. */
+#undef HAVE_BYTESWAP_H
+
+/* Define to 1 if you have the declaration of `bswap16', and to 0 if you
+   don't. */
+#undef HAVE_DECL_BSWAP16
+
+/* Define to 1 if you have the declaration of `bswap32', and to 0 if you
+   don't. */
+#undef HAVE_DECL_BSWAP32
+
+/* Define to 1 if you have the declaration of `bswap64', and to 0 if you
+   don't. */
+#undef HAVE_DECL_BSWAP64
+
+/* Define to 1 if you have the declaration of `bswap_16', and to 0 if you
+   don't. */
+#undef HAVE_DECL_BSWAP_16
+
+/* Define to 1 if you have the declaration of `bswap_32', and to 0 if you
+   don't. */
+#undef HAVE_DECL_BSWAP_32
+
+/* Define to 1 if you have the declaration of `bswap_64', and to 0 if you
+   don't. */
+#undef HAVE_DECL_BSWAP_64
+
+/* Define to 1 if you have the declaration of `IP_PKTINFO', and to 0 if you
+   don't. */
+#undef HAVE_DECL_IP_PKTINFO
+
+/* Define to 1 if you have the declaration of `RLIMIT_AS', and to 0 if you
+   don't. */
+#undef HAVE_DECL_RLIMIT_AS
+
+/* Define to 1 if you have the declaration of `RLIMIT_CORE', and to 0 if you
+   don't. */
+#undef HAVE_DECL_RLIMIT_CORE
+
+/* Define to 1 if you have the declaration of `RLIMIT_DATA', and to 0 if you
+   don't. */
+#undef HAVE_DECL_RLIMIT_DATA
+
+/* Define to 1 if you have the declaration of `RLIMIT_FSIZE', and to 0 if you
+   don't. */
+#undef HAVE_DECL_RLIMIT_FSIZE
+
+/* Define to 1 if you have the declaration of `swap16', and to 0 if you don't.
+   */
+#undef HAVE_DECL_SWAP16
+
+/* Define to 1 if you have the declaration of `swap32', and to 0 if you don't.
+   */
+#undef HAVE_DECL_SWAP32
+
+/* Define to 1 if you have the declaration of `swap64', and to 0 if you don't.
+   */
+#undef HAVE_DECL_SWAP64
+
+/* Define to 1 if you have the declaration of `__swap16', and to 0 if you
+   don't. */
+#undef HAVE_DECL___SWAP16
+
+/* Define to 1 if you have the declaration of `__swap32', and to 0 if you
+   don't. */
+#undef HAVE_DECL___SWAP32
+
+/* Define to 1 if you have the declaration of `__swap64', and to 0 if you
+   don't. */
+#undef HAVE_DECL___SWAP64
+
+/* Define to 1 if you have the <dspam/libdspam.h> header file. */
+#undef HAVE_DSPAM_LIBDSPAM_H
+
+/* Define to 1 if you have the <endian.h> header file. */
+#undef HAVE_ENDIAN_H
+
+/* Define to 1 if you have the <err.h> header file. */
+#undef HAVE_ERR_H
+
+/* Define to 1 if you have the `fgets' function. */
+#undef HAVE_FGETS
+
+/* Define to 1 if you have the `flock' function. */
+#undef HAVE_FLOCK
+
+/* Define to 1 if you have the `gethostname' function. */
+#undef HAVE_GETHOSTNAME
+
+/* Define to 1 if you have the `getline' function. */
+#undef HAVE_GETLINE
+
+/* Define to 1 if you have the `getloadavg' function. */
+#undef HAVE_GETLOADAVG
+
+/* Define to 1 if you have the `getrusage' function. */
+#undef HAVE_GETRUSAGE
+
+/* Define to 1 if you have the `inet_aton' function. */
+#undef HAVE_INET_ATON
+
+/* Define to 1 if you have the `inet_ntoa' function. */
+#undef HAVE_INET_NTOA
+
+/* Define to 1 if you have the `inet_pton' function. */
+#undef HAVE_INET_PTON
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <libdspam.h> header file. */
+#undef HAVE_LIBDSPAM_H
+
+/* Define to 1 if you have the <libmksd.h> header file. */
+#undef HAVE_LIBMKSD_H
+
+/* Define to 1 if you have the `nsl' library (-lnsl). */
+#undef HAVE_LIBNSL
+
+/* Define to 1 if you have the `socket' library (-lsocket). */
+#undef HAVE_LIBSOCKET
+
+/* Define to 1 if you have the <limits.h> header file. */
+#undef HAVE_LIMITS_H
+
+/* Define to 1 if you have the <linux/netfilter_ipv4.h> header file. */
+#undef HAVE_LINUX_NETFILTER_IPV4_H
+
+/* Define to 1 if you have the <linux/netfilter/xt_TPROXY.h> header file. */
+#undef HAVE_LINUX_NETFILTER_XT_TPROXY_H
+
+/* Define to 1 if you have the <machine/bswap.h> header file. */
+#undef HAVE_MACHINE_BSWAP_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `mmap' function. */
+#undef HAVE_MMAP
+
+/* Define to 1 if you have the <netdb.h> header file. */
+#undef HAVE_NETDB_H
+
+/* Define to 1 if you have the <netinet/in.h> header file. */
+#undef HAVE_NETINET_IN_H
+
+/* Define to 1 if you have the <netinet/ipl.h> header file. */
+#undef HAVE_NETINET_IPL_H
+
+/* Define to 1 if you have the <netinet/ip_fw2.h> header file. */
+#undef HAVE_NETINET_IP_FW2_H
+
+/* Define to 1 if you have the <netinet/ip_fw.h> header file. */
+#undef HAVE_NETINET_IP_FW_H
+
+/* Define to 1 if you have the <net/pfvar.h> header file. */
+#undef HAVE_NET_PFVAR_H
+
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
+
+/* Define to 1 if you have the <pcre/pcre.h> header file. */
+#undef HAVE_PCRE_PCRE_H
+
+/* Define to 1 if you have the `setenv' function. */
+#undef HAVE_SETENV
+
+/* Define to 1 if you have the `setproctitle' function. */
+#undef HAVE_SETPROCTITLE
+
+/* Define to 1 if you have the `setrlimit' function. */
+#undef HAVE_SETRLIMIT
+
+/* Define to 1 if the system has the type `sig_atomic_t'. */
+#undef HAVE_SIG_ATOMIC_T
+
+/* Define to 1 if the system has the type `socklen_t'. */
+#undef HAVE_SOCKLEN_T
+
+/* Define to 1 if you have the <spf2/spf.h> header file. */
+#undef HAVE_SPF2_SPF_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strndup' function. */
+#undef HAVE_STRNDUP
+
+/* Define to 1 if `st_size' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_SIZE
+
+/* Define to 1 if you have the <sys/endian.h> header file. */
+#undef HAVE_SYS_ENDIAN_H
+
+/* Define to 1 if you have the <sys/loadavg.h> header file. */
+#undef HAVE_SYS_LOADAVG_H
+
+/* Define to 1 if you have the <sys/resource.h> header file. */
+#undef HAVE_SYS_RESOURCE_H
+
+/* Define to 1 if you have the <sys/socket.h> header file. */
+#undef HAVE_SYS_SOCKET_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <sys/wait.h> header file. */
+#undef HAVE_SYS_WAIT_H
+
+/* Define to 1 if the system has the type `uint32_t'. */
+#undef HAVE_UINT32_T
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if the system has the type `u_int32_t'. */
+#undef HAVE_U_INT32_T
+
+/* Define to 1 if you have the `vasprintf' function. */
+#undef HAVE_VASPRINTF
+
+/* Maximum length of HELO/EHLO domain name logged */
+#undef HELO_LENGTH
+
+/* Maximum ident string length */
+#undef IDENT_SIZE
+
+/* Big-Endian architecture */
+#undef IS_BIG_ENDIAN
+
+/* Little-Endian architecture */
+#undef IS_LITTLE_ENDIAN
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+#undef NO_MINUS_C_MINUS_O
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Mode of .pid file */
+#undef PID_FILE_MODE
+
+/* Maximum internal printf string length */
+#undef PRINTF_SIZE
+
+/* Whether to use ClamAV daemon */
+#undef SCANNER_CLAMD
+
+/* libdspam support */
+#undef SCANNER_LIBDSPAM
+
+/* mksd support */
+#undef SCANNER_MKSD
+
+/* Be quiet about Connection reset by peer messages */
+#undef SILENT_ECONNRESET
+
+/* The size of `pid_t', as computed by sizeof. */
+#undef SIZEOF_PID_T
+
+/* The size of `size_t', as computed by sizeof. */
+#undef SIZEOF_SIZE_T
+
+/* The size of `time_t', as computed by sizeof. */
+#undef SIZEOF_TIME_T
+
+/* The size of `uid_t', as computed by sizeof. */
+#undef SIZEOF_UID_T
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Use NAT for transparent proxy */
+#undef USE_NAT
+
+/* Use getsockname-compatible transparent proxy */
+#undef USE_NAT_GETSOCKNAME
+
+/* Use BSD/ipfilter for tranparent proxy */
+#undef USE_NAT_IPFILTER
+
+/* Use BSD/ipfw for tranparent proxy */
+#undef USE_NAT_IPFW
+
+/* Use Linux netfilter for transparent proxy */
+#undef USE_NAT_NETFILTER
+
+/* Use BSD/pf for tranparent proxy */
+#undef USE_NAT_PF
+
+/* Use Linux netfilter-tproxy extension for transparent proxy */
+#undef USE_NAT_TPROXY
+
+/* PCRE support */
+#undef USE_REGEX
+
+/* Use shared memory */
+#undef USE_SHARED_MEM
+
+/* SPF support */
+#undef USE_SPF
+
+/* Package version */
+#undef VERSION
+
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif

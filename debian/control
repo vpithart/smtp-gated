@@ -1,0 +1,22 @@
+Source: smtp-gated
+Section: net
+Priority: optional
+Maintainer: Bartlomiej Korupczynski <bartek@klolik.org>
+Build-Depends: debhelper (>= 4.0.0), autotools-dev, libpcre3-dev, libspf2-dev
+Standards-Version: 3.6.2
+
+Package: smtp-gated
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, adduser
+Suggests: clamav, spamassassin
+Recommends: clamav
+Description: Transparent SMTP proxy, catching viruses and/or SPAM.
+ smtp-gated is a transparent SMTP proxy, which can be installed on a linux
+ router. Using netfilter subsystem, one can redirect all SMTP traffic to
+ proxy, and check it for viruses (using clamav) or SPAM (using spamassassin).
+ .
+ Infected hosts can be locked for defined time. On every event, script can be
+ used to perform administrator defined actions.
+ .
+ Proxy aims to be flood-proof. Allows definition of per host connection limit,
+ or refusing service above certain system load.

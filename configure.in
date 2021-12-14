@@ -1,0 +1,521 @@
+#	Copyright (C) 2004-2005 Bart³omiej Korupczynski <bartek@klolik.org>
+#	
+#	This program is free software; you can redistribute it and/or 
+#	modify it under the terms of the GNU General Public License 
+#	as published by the Free Software Foundation; either 
+#	version 2 of the License, or (at your option) any later 
+#	version.
+#	
+#	This program is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#	
+#	You should have received a copy of the GNU General Public License
+#	along with this program; if not, write to the Free Software
+#	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+# need following for pcre to be used on freebsd:
+# CFLAGS="-I/usr/local/include/ -L/usr/local/lib" ./configure
+
+#AC_PREREQ(2.53)
+
+AC_INIT(Makefile.am)
+AM_CONFIG_HEADER([config.h])
+AC_CANONICAL_HOST
+
+AM_INIT_AUTOMAKE([smtp-gated], [1.4.20.0])
+RELEASE_DATE="Sun,  7 Sep 2008 11:00:00 +0200"
+
+
+#
+# programs
+
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+
+#
+# flags
+
+CFLAGS="$CFLAGS -Wall"
+
+#
+# progs
+
+AC_CHECK_TOOL(STRIP,strip)
+AC_CHECK_PROG(PERL,perl,perl)
+#AC_PATH_PROG(TXT2TAGS,txt2tags)
+AC_CHECK_PROG(TXT2TAGS,txt2tags,txt2tags)
+
+#
+# headers
+
+AC_HEADER_STDC
+
+AC_C_BIGENDIAN(
+	AC_DEFINE(IS_BIG_ENDIAN, [], [Big-Endian architecture]),
+	AC_DEFINE(IS_LITTLE_ENDIAN, [], [Little-Endian architecture]),
+	AC_ERROR([Architecture endianess unknown!]))
+
+AC_CHECK_TYPES([uint32_t, u_int32_t])
+AC_CHECK_TYPES([sig_atomic_t],,,[#include <signal.h>])
+AC_CHECK_TYPES([socklen_t])
+
+AC_CHECK_SIZEOF([pid_t])
+AC_CHECK_SIZEOF([uid_t])
+AC_CHECK_SIZEOF([time_t])
+AC_CHECK_SIZEOF([size_t])
+
+AC_CHECK_MEMBERS([struct stat.st_size])
+
+AC_CHECK_HEADERS([err.h limits.h stdint.h netinet/in.h inttypes.h])
+AC_CHECK_HEADERS([sys/types.h sys/time.h sys/socket.h])
+AC_CHECK_HEADERS([sys/loadavg.h sys/resource.h sys/wait.h])
+AC_CHECK_HEADERS([netdb.h arpa/inet.h arpa/nameser.h])
+
+AC_CHECK_HEADERS([endian.h sys/endian.h byteswap.h machine/bswap.h])
+AC_CHECK_DECLS([bswap_16, bswap_32, bswap_64, bswap16, bswap32, bswap64],,,
+	[[
+	#include <sys/types.h>
+	#ifdef HAVE_ENDIAN_H
+	#include <endian.h>
+	#endif
+	#ifdef HAVE_SYS_ENDIAN_H
+	#include <sys/endian.h>
+	#endif
+	#ifdef HAVE_BYTESWAP_H
+	#include <byteswap.h>
+	#endif
+	#ifdef HAVE_MACHINE_BSWAP_H
+	#include <machine/bswap.h>
+	#endif
+	]])
+AC_CHECK_DECLS([swap16, swap32, swap64, __swap16, __swap32, __swap64],,, 
+	[[
+	#include <sys/types.h>
+	#ifdef HAVE_ENDIAN_H
+	#include <endian.h>
+	#endif
+	#ifdef HAVE_SYS_ENDIAN_H
+	#include <sys/endian.h>
+	#endif
+	#ifdef HAVE_BYTESWAP_H
+	#include <byteswap.h>
+	#endif
+	#ifdef HAVE_MACHINE_BSWAP_H
+	#include <machine/bswap.h>
+	#endif
+	]])
+
+#AC_CHECK_DECLS([htobe16, htobe32, htobe64, htole16, htole32, htole64])
+#AC_CHECK_DECLS([be16toh, be32toh, be64toh, le16toh, le32toh, le64toh],,, [#include <sys/types.h>])
+
+AC_CHECK_FUNCS([strndup asprintf vasprintf])
+AC_CHECK_FUNCS([setenv setproctitle getloadavg])
+AC_CHECK_FUNCS(accept,,[AC_CHECK_LIB(socket,accept)])
+AC_CHECK_FUNCS(inet_ntoa,,[AC_CHECK_LIB(nsl,inet_ntoa)])
+AC_CHECK_FUNCS([gethostname flock mmap])
+
+AC_CHECK_FUNCS([inet_aton],,[AC_CHECK_FUNCS([inet_pton],,[AC_ERROR([inet_aton nor inet_pton found!])])])
+AC_CHECK_FUNCS([getline],,[AC_CHECK_FUNCS([fgets],,[AC_ERROR([getline nor fgets found!])])])
+
+AC_CHECK_FUNCS([getrusage setrlimit])
+AC_CHECK_DECLS([RLIMIT_CORE, RLIMIT_AS, RLIMIT_DATA, RLIMIT_FSIZE],,,
+	[[
+	#include <sys/time.h>
+	#include <sys/resource.h>
+	#include <unistd.h>
+	]])
+
+AC_CHECK_DECLS([IP_PKTINFO],,,
+	[[
+	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <netinet/ip.h>
+	]])
+
+#
+# NAT support
+#
+
+AC_CHECK_HEADERS([linux/netfilter_ipv4.h],
+	[found_netfilter=1],,
+	[[
+	#ifdef HAVE_LIMITS_H
+	#include <limits.h>
+	#endif
+	#ifdef HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+	#endif
+	]])
+
+AC_CHECK_HEADERS([linux/netfilter/xt_TPROXY.h], [found_tproxy=1],,
+	[[
+	#include <sys/types.h>
+	#include <asm/byteorder.h>
+	#include <netinet/in.h>
+	#include <linux/netfilter.h>
+	]])
+
+AC_CHECK_HEADERS([netinet/ipl.h], [found_ipfilter=1])
+
+AC_CHECK_HEADERS([net/pfvar.h], [found_pf=1],,
+	[[
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <sys/ioctl.h>
+	#include <sys/fcntl.h>
+	#include <net/if.h>
+	#include <netinet/in.h>
+	#include <net/pfvar.h>
+	]])
+
+AC_CHECK_HEADERS([netinet/ip_fw.h netinet/ip_fw2.h], [found_ipfw=1],,
+	[[
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <netinet/in_systm.h>
+	#include <netinet/ip.h>
+	#include <netinet/tcp.h>
+	#include <netinet/udp.h>
+	#include <net/if.h>
+	#include <netinet/ip_fw.h>
+	]])
+
+
+dnl AC_MSG_CHECKING([if netfilter available])
+dnl AC_MSG_RESULT(USE_NAT_NETFILTER)
+dnl AC_MSG_NOTICE([])
+
+
+#
+# scanner support
+#
+
+AC_CHECK_HEADERS([libmksd.h], [found_mksd=yes])
+AC_CHECK_HEADERS([libdspam.h], [found_libdspam=yes])
+AC_CHECK_HEADERS([dspam/libdspam.h], [found_libdspam=yes])
+AC_CHECK_HEADERS([pcre.h], [found_pcre=yes])
+AC_CHECK_HEADERS([pcre/pcre.h], [found_pcre=yes])
+AC_CHECK_HEADERS([spf2/spf.h], [found_spf=yes],,
+	[[
+	#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+	#endif
+	#ifdef HAVE_INTTYPES_H
+	#include <inttypes.h>
+	#endif
+	#ifdef HAVE_ARPA_INET_H
+	#include <arpa/inet.h>
+	#endif
+	#ifdef HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+	#endif
+	#ifdef HAVE_NETDB_H
+	#include <netdb.h>
+	#endif
+	]])
+
+
+#
+# --enable-debug
+
+AC_MSG_CHECKING([if debugging enabled])
+AC_ARG_ENABLE(gdb, AC_HELP_STRING([--enable-gdb], [Enables gdb (debugger) information]))
+if test "x$enable_gdb" = "xyes"; then
+	CFLAGS="-g -Wall -O0"
+	AC_MSG_RESULT([yes ($CFLAGS)])
+else
+	AC_MSG_RESULT([no])
+fi
+
+#
+# --enable-polish
+
+AC_ARG_WITH(lang,
+	AC_HELP_STRING([--with-lang=CC], [Specify default language for proxy messages (en,pl,...)]),
+	[use_lang="$withval"],[])
+
+if test "x$use_lang" != "x"; then
+	AC_CHECK_FILE([lang/lang-$use_lang.h], [], [
+		AC_MSG_WARN([language file not found, falling back to english])
+		use_lang=en])
+else
+	use_lang="en"
+fi
+
+#if test -f "lang/lang-$use_lang.h"; then
+#	AC_MSG_RESULT([found lang/lang-$use_lang.h])
+#else
+#	AC_MSG_RESULT([not found, fallback to english])
+#	use_lang=en
+#fi
+
+PROXY_LANG="$use_lang"
+AC_SUBST(PROXY_LANG)
+AC_MSG_NOTICE([-----------------------------------------------------------])
+AC_MSG_NOTICE([setup: proxy messages default language: $use_lang])
+
+#
+# --disable-nat
+
+AC_ARG_ENABLE(nat, AC_HELP_STRING([--enable-nat], [Force NAT transparent proxy code]))
+AC_ARG_ENABLE(nat, AC_HELP_STRING([--disable-nat], [Disable NAT transparent proxy code]))
+
+if test "x$enable_nat" != "xno"; then
+	if test "x$found_netfilter" = "x1"; then
+		found_nat="${found_nat:+$found_nat }netfilter"
+		AC_DEFINE(USE_NAT_NETFILTER, 1, [Use Linux netfilter for transparent proxy])
+		AC_MSG_NOTICE([setup: NAT support: Linux/netfilter])
+	fi
+	if test "x$found_tproxy" = "x1"; then
+		found_nat="${found_nat:+$found_nat }tproxy"
+		AC_DEFINE(USE_NAT_TPROXY, 1, [Use Linux netfilter-tproxy extension for transparent proxy])
+		AC_MSG_NOTICE([setup: NAT support: Linux/tproxy])
+	fi
+	if test "x$found_ipfw" = "x1"; then
+		found_nat="${found_nat:+$found_nat }ipfw"
+		AC_DEFINE(USE_NAT_IPFW, 1, [Use BSD/ipfw for tranparent proxy])
+		AC_MSG_NOTICE([setup: NAT support: BSD/ipfw])
+	fi
+	if test "x$found_ipfilter" = "x1"; then
+		found_nat="${found_nat:+$found_nat }ipfilter"
+		AC_DEFINE(USE_NAT_IPFILTER, 1, [Use BSD/ipfilter for tranparent proxy])
+		AC_MSG_NOTICE([setup: NAT support: BSD/ipfilter])
+	fi
+	if test "x$found_pf" = "x1"; then
+		found_nat="${found_nat:+$found_nat }pf"
+		AC_DEFINE(USE_NAT_PF, 1, [Use BSD/pf for tranparent proxy])
+		AC_MSG_NOTICE([setup: NAT support: BSD/pf])
+	fi
+
+	if test "x$found_nat" = "x"; then
+		if test "x$enable_nat" = "xyes"; then
+			found_nat="getsockname"
+			AC_DEFINE(USE_NAT_GETSOCKNAME, 1, [Use getsockname-compatible transparent proxy])
+			AC_MSG_NOTICE([setup: NAT support: getsockname-compatible])
+			AC_MSG_WARN([getsockname-compatible tranparent proxy enabled, be careful!])
+		else
+			AC_MSG_NOTICE([setup: NAT transparent proxy code: no supported framework found])
+		fi
+	fi
+
+	if test "x$found_nat" != "x"; then
+		AC_DEFINE_UNQUOTED(USE_NAT, ["$found_nat"], [Use NAT for transparent proxy])
+#		AC_MSG_NOTICE([setup: NAT transparent proxy support for: $found_nat])
+	else
+		AC_MSG_NOTICE([setup: no supported framework for NAT transparent proxy])
+	fi
+else
+	AC_MSG_NOTICE([setup: NAT transparent proxy code: disabled])
+fi
+
+#
+# --disable-shared-mem
+
+AC_ARG_ENABLE(
+	shared-mem,
+	AC_HELP_STRING([--disable-shared-mem], [Disable use of shared memory (and most of statistics)]))
+
+if test "x$enable_shared_mem" != "xno"; then
+	enable_shared_mem="yes"
+	AC_DEFINE(USE_SHARED_MEM, 1, [Use shared memory])
+fi
+AC_MSG_NOTICE([setup: use of shared memory: $enable_shared_mem])
+
+#
+# --enable-chunking
+
+AC_ARG_ENABLE(
+	chunking,
+	AC_HELP_STRING([--enable-chunking], [Enable support for SMTP CHUNKING extension, BROKEN!]))
+
+if test "x$enable_chunking" != "xyes"; then
+	enable_chunking="no"
+	AC_DEFINE(FILTER_CHUNKING, 1, [Filter out SMTP CHUNKING extension])
+fi
+AC_MSG_NOTICE([setup: SMTP CHUNKING extension support (BROKEN): $enable_chunking])
+
+#
+# --enable-silent-econnreset
+
+AC_ARG_ENABLE(
+	silent-econnreset,
+	AC_HELP_STRING([--enable-silent-econnreset], [Be quiet about Connection reset by peer messages]))
+
+if test "x$enable_silent_econnreset" = "xyes"; then
+	AC_DEFINE(SILENT_ECONNRESET, 1, [Be quiet about Connection reset by peer messages])
+else
+	enable_silent_econnreset="no"
+fi
+AC_MSG_NOTICE([setup: silent ECONNRESET: $enable_silent_econnreset])
+
+#
+# --enable-mksd
+
+AC_ARG_ENABLE(
+	mksd,
+	AC_HELP_STRING([--enable-mksd], [Enable support for MkS daemon scanner]))
+
+#if test "x$found_mksd" = "x1"; then
+if test "x$enable_mksd" = "xyes"; then
+	AC_DEFINE(SCANNER_MKSD, 1, [mksd support])
+else
+	enable_mksd="no"
+fi
+
+AC_MSG_NOTICE([setup: enable mksd: $enable_mksd])
+AM_CONDITIONAL(SCANNER_MKSD, test x$enable_mksd = xyes)
+
+#
+# PCRE
+
+AC_ARG_ENABLE(
+	pcre,
+	AC_HELP_STRING([--disable-pcre], [Disable support for PCRE]))
+
+if test "x$enable_pcre" = "xno"; then
+	found_pcre="disabled"
+else
+	if test "x$found_pcre" = "xyes"; then
+		AC_DEFINE(USE_REGEX, 1, [PCRE support])
+	else
+		found_pcre="no"
+	fi
+fi
+
+AC_MSG_NOTICE([setup: enable regexp: $found_pcre])
+AM_CONDITIONAL(USE_REGEX_PCRE, test x$found_pcre = xyes)
+
+
+#
+# SPF
+
+AC_ARG_ENABLE(
+	spf,
+	AC_HELP_STRING([--disable-spf], [Disable support for SPF]))
+
+if test "x$enable_spf" = "xno"; then
+	found_spf="disabled"
+else
+	if test "x$found_spf" = "xyes"; then
+		AC_DEFINE(USE_SPF, 1, [SPF support])
+	else
+		found_spf="no"
+	fi
+fi
+
+AC_MSG_NOTICE([setup: enable SPF: $found_spf])
+AM_CONDITIONAL(USE_SPF_LIBSPF, test x$found_spf = xyes)
+
+
+#
+# libdspam
+
+AC_ARG_ENABLE(
+	libdspam,
+	AC_HELP_STRING([--enable-libdspam], [Enable support for libdspam (probably broken)]))
+
+if test "x$enable_libdspam" = "xyes"; then
+	if test "x$found_libdspam" = "xyes"; then
+		AC_DEFINE(SCANNER_LIBDSPAM, 1, [libdspam support])
+	else
+		found_libdspam="no"
+	fi
+else
+	found_libdspam="disabled"
+fi
+
+AC_MSG_NOTICE([setup: enable libdspam (BROKEN): $found_libdspam])
+AM_CONDITIONAL(SCANNER_LIBDSPAM, test x$found_libdspam = xyes)
+
+# debian package:
+# if HAVE_DSPAM_LIBDSPAM_H
+# ln -s config.h auto-config.h
+# endif
+
+AC_MSG_NOTICE([-----------------------------------------------------------])
+
+#
+# --enable-remake-doc
+
+#AC_ARG_ENABLE(
+#	remake_doc,
+#	AC_HELP_STRING([--enable-remake-doc], [Enable remaking of documentation files. Maintainer only]))
+
+#AM_CONDITIONAL(REMAKE_DOC, test x$enable_remake_doc = xyes)
+
+AM_CONDITIONAL(TXT2TAGS, test x$TXT2TAGS != x)
+
+#
+# defaults
+
+#AC_DEFINE(DEFAULT_CONFIG_FILE, "/etc/smtp-gated.conf", [Default configuration file])
+AC_DEFINE(SCANNER_CLAMD, 1, [Whether to use ClamAV daemon])
+AC_DEFINE(PRINTF_SIZE, 2048, [Maximum internal printf string length])
+AC_DEFINE(HELO_LENGTH, 48, [Maximum length of HELO/EHLO domain name logged])
+AC_DEFINE(IDENT_SIZE, 20, [Maximum ident string length])
+AC_DEFINE(CONN_REJ_CODE, 554, [Initial connection rejection code])
+AC_DEFINE(PID_FILE_MODE, 0664, [Mode of .pid file])
+
+AC_SUBST(PROXY_LANG)
+
+#
+# RPM .spec versioning
+
+RELEASE=`echo "$VERSION" | sed -e 's/.*-//'`
+RPM_VER=`echo "$VERSION" | sed -e 's/-.*//'`
+if test "x$RPM_VER" = "x$RELEASE"; then
+	RELEASE=""
+	RPM_REL="1"
+	RPM_FULL="$RPM_VER"
+else
+	RPM_REL="$RELEASE"
+	RPM_FULL="$RPM_VER-$RPM_REL"
+fi
+AC_DEFINE_UNQUOTED(VERSION, ["$VERSION"], [Package version])
+#AC_DEFINE_UNQUOTED(RELEASE, ["$RELEASE"], [Package release])
+AC_SUBST(RELEASE)
+AC_SUBST(RPM_FULL)
+AC_SUBST(RPM_VER)
+AC_SUBST(RPM_REL)
+
+#
+# debian versioning
+
+AC_SUBST(RELEASE_DATE)
+
+#
+# output
+
+#	tests/Makefile debian/changelog
+
+AC_CONFIG_FILES([Makefile src/Makefile lib/Makefile src/lang.h lang/Makefile])
+AC_CONFIG_FILES([contrib/Makefile doc/Makefile tests/Makefile])
+AC_CONFIG_FILES([smtp-gated.spec])
+#AC_CONFIG_FILES([debian/changelog])
+
+#if test "x$TXT2TAGS" != "x"; then
+	AC_CONFIG_FILES([doc/smtp-gated.t2t doc/smtp-gated.conf.t2t])
+#fi
+
+AC_OUTPUT()
+
+
+#
+# install
+#
+# mkdir /var/run/smtp-gated/
+# mkdir /var/spool/smtp-gated/{msg,lock}
+# addgroup smtpgw
+# adduser smtpgw
+# chown -R smtpgw:smtpgw /var/run/smtp-gated /var/spool/smtp-gated
+# install debian/redhat startup script
+#
+# smtp-gated.spec
+# debian/
+

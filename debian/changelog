@@ -1,0 +1,6 @@
+smtp-gated (1.4.16.2) unstable; urgency=low
+
+  * Configure autorelease; see ChangeLog for changes
+
+ -- bartek <bartek@klolik.org>  Tue,  6 Jan 2009 14:17:00 +0200
+

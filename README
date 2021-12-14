@@ -1,0 +1,260 @@
+--------------------------------------------------------------------
+SMTP-Proxy (alias SMTP-gated)
+Project home page: http://smtp-proxy.klolik.org
+Bartlomiej Korupczynski
+bartek {malpa} klolik {kropka} org
+(c) Warszawa 2004-2005
+--------------------------------------------------------------------
+
+
+WSTEP / INTRODUCTION
+--------------------
+
+What does it do, and what does it not:
+- Scanning on the fly; there is no noticeable latency and timeouts during
+  SMTP data transmission
+- Supports STARTTLS and PIPELINING (SMTP CHUNKING from RFC3030 will also
+  be available some day)
+- Umo¿liwia zbudowanie farmy 'skanerów' (wymaga to spatchowanego oidentd,
+byæ mo¿e wkrótce wprowadzê jakie¶ prostsze rozwi±zanie), dla jednego b±d¼
+kilku routerów. (*)
+- Umo¿liwia wstawianie w nag³ówku informacji o ¼ród³owym IP (i ewentualnie
+idencie - patrz punkt poprzedni)
+- Dzia³a z kilkoma platformami obs³uguj±cymi NAT.
+- Ma bardzo fajny podgl±d w to co siê aktualnie dzieje ;)
+- Umo¿liwia wprowadzenie ograniczeñ na ilo¶æ sesji: wszystkich, per IP
+(ewentualnie per ident - patrz punkt *)
+- Odrzucanie po³±czeñ przy wysokim loadavg (z komunikatem)
+- Ograniczenie skanowania do przesy³ek mniejszych ni¿ administrator sobie
+za¿yczy
+- Wspó³praca z clamav oraz mksd (to drugie nie testowane od jakiego¶ czasu)
+- Umo¿liwia skanowaniem spamassasinem ka¿dej przesy³ki (rezultaty l±duj± w
+syslogu).
+- Dla ka¿dego po³±czenia tworzy nowy proces
+- (obecnie) Nie obs³uguje akcji w wypadku napotkania wirusa; do klienta
+dociera wy³±cznie komunikat o jego napotkaniu. W przygotowaniu jest blokada
+czasowa dla takiego osobnika.
+- Nie ma zbyt uporz±dkowanego kodu ;]
+- Brak szczególnej dokumentacji
+
+
+Wbrew pozorom nie ma (narazie) supportu dla PostgreSQL.
+Obsluga BDAT nie jest obecnie (<=1.4.4) przetestowana i prawdopodobnie nie
+dziala.
+
+
+INSTALACJA / INSTALLATION
+-------------------------
+
+Executable installs in /usr/local/sbin by default.
+You need netfilter headers for compilation. If you use kernel from some
+distribution, this means you need to install package named like iptables-dev or
+iptables-devel.
+
+
+1. Compilation
+
+	./configure
+	make
+
+   If ipfw on FreeBSD won't be recognised, you can try like this:
+
+	./configure --enable-nat
+	make
+
+   Full list of acceptable options you can get by:
+
+	./configure --help
+
+   Be careful! "--enable-chunking" *is* broken, so you don't want to
+   enable it.
+
+2. Installation (/usr/local/sbin by default)
+
+	make install
+
+   You can find start scripts for debian and redhat in lib/
+   This should be placed in /etc/rc.d/init.d/
+
+   If you are upgrading, you *must* look for "KONFIGURACJA - ZMIANY".
+
+
+KONFIGURACJA - ZMIANY / CONFIGURATION - CHANGES
+-----------------------------------------------
+
+Should the software be upgraded from previous releases, configuration
+some configuration options should be changed:
+
+1.4.14-rc1
+	Change configuration options:
+	- use_netfilter => mode
+	- lookup_port => remote_port
+	- max_per_*_lock => lock_on
+	- leave_on_* => spool_leave_on
+	- spam_block (removed)
+	- clamd_path => antivirus_path
+	- spamd_path => antispam_path
+	- antivirus_type, antispam_type (new)
+
+1.4.12-rc10
+	Changed many options
+
+1.4.12-rc5
+	Changed nat_header option to nat_header_type. Header will not
+	be inserted, until you reflect that change in your configuration
+	file.
+
+
+KONFIGURACJA / CONFIGURATION
+----------------------------
+
+1. All options are described in src/options.h
+   (you can find "smtp-proxy.isp" string).
+
+2. You can verify your configuration by:
+
+	smtp-gated -t /etc/smtp-gated.conf
+	smtp-gated -T /etc/smtp-gated.conf (*)
+
+   This will print effective configuration. If nothing gets displayed, look at
+   system logs (probably daemon facility).
+   (*) second form includes message strings and all option values. Both of this
+   can be changed. You can also change messages to predefined language by
+   passing apropriate --with-lang=XX for "configure" script.
+
+3. Directory setup
+
+   Skaner musi miec dostep do plikow "spool_path" (domyslnie jest to
+   /var/spool/smtp-gated/msg). Ja preferuje takie rozwiazanie:
+
+	mkdir -p /var/spool/smtp-gated/{msg,lock}
+	chown -R smtpgw:smtpgw /var/spool/smtp-gated
+	chmod 750 /var/spool/smtp-gated
+
+   A nastepnie dodanie np. ClamAV do grupy smtpgw.
+   Powyzszy chown mozna tez zamienic na:
+
+	chown -R smtpgw:clamav /var/spool/smtp-gated
+
+4. Plik konfiguracyjny do edycji mozna przygotowac przez:
+
+	smtp-gated -t >nowy_plik
+
+   Wartosci domyslne (lub nie uzywane) nalezy zakomentowac, aby nie
+   przeszkadzaly przy upgrade-ach. Zostawiamy tylko to co jest inne
+   niz domyslne. Linie zaczynajace sie od znakow '#' oraz ';' sa ignorowane.
+   Ignorowane sa takze spacje i tabulatory na poczatku i koncu linii, oraz
+   po nazwie opcji. Wszystkie inne znaki sa traktowane jako czesc parametru
+   (takze cudzyslowy).
+
+   Nalezy ustawic podstawowe opcje (podane wartosci sa przykladowe):
+
+	proxy_name	smtp-proxy.isp
+	mode		nat
+	bind_address	127.0.0.1
+	antivirus_type	clamd
+	antispam_type	spamassassin
+	set_user	smtpgw
+	nat_header_type	full
+
+   Dla maszyn wieloprocesorowych, mozna podwyzszyc wartosci nastepujacych
+   opcji:
+
+	max_load	4
+	spam_max_load	2
+
+5a. Przekierowanie iptables (Linux - najprostsza wersja)
+
+	iptables -t nat -A PREROUTING -p tcp --dport 25
+		-j DNAT --to ip_proxy:port_proxy
+
+   Najlepiej jednak przekierowac wylacznie polaczenia z interfejsu
+   wewnetrznego i sieci wewnetrznej, np.:
+
+	iptables -t nat -A PREROUTING -p tcp --dport 25
+		-i eth1 -s 192.168.1.0/24 -j DNAT --to ip_proxy:port_proxy
+
+5b. Przekierowanie ipfw (FreeBSD)
+
+	ipfw add 10 fwd ip_proxy,port_proxy
+		from 192.168.1.0/24 to any 25 via fxp0
+
+5c. Przekierowanie ipfilter (FreeBSD/NetBSD). W pliku /etc/ipnat.conf:
+
+	rdr fxp0 0/0 port 25 -> 127.0.0.1 port 9199
+
+6. Status demona mozemy uzyskac poprzez:
+
+	/etc/rc.d/init.d/smtp-gated status
+
+
+UWAGA!
+   Jesli dzieje sie cos nie halo i nie wiadomo o co chodzi - w pierwszej
+   kolejnosci sprawdz logi systemowe.
+
+   Poziom logowania okreslony przez log_level dotyczy *wszystkich* wpisow,
+   a co za tym idzie ustawiony zbyt nisko moze wyciac np. wpisy dotyczace
+   adresow e-mail.
+
+   Sprobuj tez wywolac smtp-gated -t /etc/plik_konfiguracyjny i przejrzyj
+   wyniki.
+
+
+BEZPIECZENSTWO / SECURITY
+-------------------------
+
+1. Nalezy wziac pod uwage fakt, iz nie zabezpieczony smtp-gated (czyli w
+   domyslnej konfiguracji) bedzie open-relay-em (czyli de facto pomaga
+   spamerom i wirusom). Rozwiazaniem tego problemu moga byc:
+
+   a) Zabezpieczenie portu na ktorym slucha smtp-gated przy pomocy iptables
+
+	iptables -I INPUT -p tcp --dport 9199 ! -s 192.168.1.0/24 -j DROP
+
+      badz
+
+	iptables -I INPUT -p tcp --dport 9199 -i eth0 -j DROP
+
+      gdzie:
+         192.168.1.0: siec wewnetrzna
+         eth0: interfejs zewnetrzny (do Internetu)
+
+   b) Ustawienie bind_address na 127.0.0.1 lub na adres interfejsu sieci
+      wewnetrznej.
+
+2. Na wiekszosci systemow porty od 1024 w zwyz, moga byc uzywane przez dowolnego
+   uzytkownika. Nie nalezy wiec ich uzywac na serwerze z publicznym dostepem do
+   shella. Nalezy wtedy zmienic "port" na dowolny nieuzywany, ponizej 1024.
+ 
+3. Wszystkie wiadomosci sa przechowywane w plikach tymczasowych. Nalezy
+   ograniczyc do nich dostep dla innych uzytkownikow. Dostep musi byc jednak
+   zapewniony dla ClamAV i ewentualnie SpamAssassina. Najlatwiej to uzyskac
+   ustawiajac odpowiednie grupy dla procesow.
+
+
+INNE / MISCELANEOUS
+-------------------
+
+Uzywasz tego oprogramowania na wlasne ryzyko. Autor nie ponosi
+odpowiedzialnosci za jakiekolwiek straty badz szkody spowodowane jego
+uzyciem, ani odpowiedzialnosci z jakichkolwiek innych przyczyn.
+
+Jesli uzywasz programu powyzej miesiaca, chetnie sie dowiem o jego
+stabilnosci. Tym chetniej im bedzie ona nizsza ;) Wszelkie tego typu
+informacje prosze na maila, wraz z gzip-owanym logiem.
+
+Adres: smtp-proxy {ma³pa} klolik {kropka} org
+
+
+PODZIEKOWANIA / THANKS TO
+-------------------------
+
+Kolejnosc przypadkowa :)
+
+Dla Grzegorza Janoszki za zgloszenie kilku niedorobek.
+Dla Bartosza Kuzmy za wsparcie dla IPFilter w NetBSD
+(oryginal w contrib/ipfilter.diff)
+
+
+: vim: set textwidth=80 tabstop=4 shiftwidth=4 :
+

@@ -1,0 +1,110 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:             smtp-gated
+# Short-Description:    Start the SMTP proxy
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Required-Start:       $remote_fs $syslog $network
+# Required-Stop:        $remote_fs $syslog $network
+# Should-Start:         iptables
+### END INIT INFO
+
+# Author: Bartlomiej Korupczynski
+# Version: 2011.11.09 13:25
+
+# adduser --system --group --home /var/spool/smtp-gated --disabled-login --disabled-password smtpgw
+# mkdir -p /var/run/smtp-gated /var/spool/smtp-gated/{lock,msg}
+# chown -R smtpgw:smtpgw /var/run/smtp-gated /var/spool/smtp-gated
+# chown -R smtpgw:clamav /var/spool/smtp-gated/msg
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DESC="SMTP Gateway"
+NAME=smtp-gated
+DAEMON=/usr/local/sbin/$NAME
+
+#PIDFILE=/var/run/smtp-gated/smtp-gated.pid
+SCRIPTNAME=/etc/init.d/$NAME
+CONFIG=/etc/$NAME.conf
+PIDFILE=`$DAEMON -t "$CONFIG" | awk '(/^pidfile/) {print $2}'`
+
+# Gracefully exit if the package has been removed.
+[ -x "$DAEMON" ] || exit 0
+
+# Read config file if it is present.
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+. /lib/lsb/init-functions
+
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME"
+	start-stop-daemon --start --quiet --pidfile $PIDFILE \
+		--exec $DAEMON -- "$CONFIG"
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	$DAEMON -K "$CONFIG"
+#	start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+#		--exec $DAEMON -- "$CONFIG"
+	echo "."
+	;;
+  reload|force-reload)
+	#
+	#	If the daemon can reload its config files on the fly
+	#	for example by sending it SIGHUP, do it here.
+	#
+	#	If the daemon responds to changes in its config file
+	#	directly anyway, make this a do-nothing entry.
+	#
+	echo -n "Syntax checking..."
+	$DAEMON -t "$CONFIG" >/dev/null
+	if [ $? = 0 ]; then
+		echo
+		echo -n "Reloading $DESC configuration..."
+#		start-stop-daemon --stop --signal 1 --quiet --pidfile \
+#			$PIDFILE --exec $DAEMON -- "$CONFIG"
+		$DAEMON -r "$CONFIG"
+		echo "."
+	else
+		echo " error. see syslog for details"
+	fi
+  ;;
+  restart)
+	#
+	#	If the "reload" option is implemented, move the "force-reload"
+	#	option to the "reload" entry above. If not, "force-reload" is
+	#	just the same as "restart".
+	#
+#	start-stop-daemon --stop --quiet --oknodo --pidfile \
+#		$PIDFILE --exec $DAEMON -- "$CONFIG"
+#	sleep 1
+#	start-stop-daemon --start --quiet --pidfile \
+#		$PIDFILE --exec $DAEMON -- "$CONFIG"
+
+	echo -n "Restarting $DESC: $NAME"
+	$DAEMON -t "$CONFIG" >/dev/null || exit 1
+	$DAEMON -K "$CONFIG"
+	sleep 1
+	$DAEMON "$CONFIG"
+
+	echo "."
+	;;
+  status)
+	$DAEMON -s "$CONFIG"
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload|status}" >&2
+	# echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

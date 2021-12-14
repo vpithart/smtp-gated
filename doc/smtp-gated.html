@@ -1,0 +1,252 @@
+<?xml version="1.0"
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>smtp-gated</title>
+<meta name="generator" content="http://txt2tags.org" />
+</head>
+<body bgcolor="white" text="black">
+<div align="center">
+<h1>smtp-gated</h1>
+<h2>Bartlomiej Korupczynski</h2>
+<h3>2013-02-26</h3>
+</div>
+
+
+<h1>NAME</h1>
+
+<p>
+<b>smtp-gated</b> - transparently block viruses during SMTP connections
+</p>
+
+<h1>VERSION</h1>
+
+<p>
+This manual describes smtp-gated v. 1.4.20.0
+</p>
+
+<h1>SYNOPSIS</h1>
+
+<p>
+<b>smtp-gated</b> [-f] [ -h | -s | -S | -r | -t | -T | -v | -V ] config_file
+</p>
+
+<h1>DESCRIPTION</h1>
+
+<p>
+<b>smtp-gated</b> checks SMTP traffic and blocks any viruses found.
+It can also spam-check messages. E-mail containing virus is blocked
+(SMTP-server session is brought down), and a proper message is sent
+to client software. E-mails found to be a SPAM, can also be blocked,
+or just the fact is logged.
+</p>
+<p>
+<b>smtp-gated</b> uses netfilter framework to forward connections to destination
+MTA. It's meant to be transparent, so any SMTP-authentication works ok.
+Also pipelining extension is supported.
+</p>
+<p>
+Daemonised scanning engines support is integrated, so there is minimal
+performance hit on scanning.
+</p>
+
+<h1>CONFIGURATION</h1>
+
+<p>
+Configuration is done with config_file. There is no default path for it.
+If you would like to create configuration template, see <b>-t</b> option:
+</p>
+	<blockquote>
+	smtp-gated -t | sed -e 's/^[a-z]/;&amp;/' &gt;/etc/smtp-gated.conf
+	</blockquote>
+<p>
+To make upgrades easier, be sure not to uncomment unneccesary options.
+</p>
+
+<h1>OPTIONS</h1>
+
+<p>
+Options marked with <i>CONFIG</i> require config file on command line. For others,
+no config file means default configuration.
+</p>
+
+<dl>
+<dt><b>-C name</b> [CONFIG]</dt><dd>
+show value for configuration variable "name"
+</dd>
+<dt><b>-f</b></dt><dd>
+run foreground, use for debugging
+</dd>
+<dt><b>-h</b></dt><dd>
+command reference
+</dd>
+<dt><b>-K</b> [CONFIG]</dt><dd>
+kill running process (TERM in SIGNALS)
+</dd>
+<dt><b>-s</b> [CONFIG]</dt><dd>
+prepare &amp; show process status (USR1 in SIGNALS)
+</dd>
+<dt><b>-S</b> [CONFIG]</dt><dd>
+prepare &amp; show process status file name
+</dd>
+<dt><b>-r</b> [CONFIG]</dt><dd>
+reload configuration (HUP in SIGNALS)
+</dd>
+<dt><b>-t</b></dt><dd>
+syntax check &amp; dump configuration (except messages)
+</dd>
+<dt><b>-T</b> [CONFIG]</dt><dd>
+syntax check &amp; dump configuration (including messages)
+</dd>
+<dt><b>-v</b></dt><dd>
+show version
+</dd>
+<dt><b>-V</b></dt><dd>
+show version &amp; compiled-in options
+</dd>
+<dt><b>config_file</b></dt><dd>
+required for most commands, except <b>-t</b> and <b>-T</b>.
+</dd>
+</dl>
+
+<h1>SIGNALS</h1>
+
+<dl>
+<dt><b>HUP</b></dt><dd>
+reload configuration
+</dd>
+<dt><b>USR1</b></dt><dd>
+dump statistics (see -s in OPTIONS)
+</dd>
+<dt><b>TERM</b></dt><dd>
+close server socket and wait for existing sessions to finish.
+</dd>
+<dt><b>QUIT</b></dt><dd>
+same as above
+</dd>
+</dl>
+
+<h1>RELAYING</h1>
+
+<p>
+Listening port <u>MUST</u> be protected from world-access or proxy will
+act as open-relay. This can be achieved either by setting bind_address
+to internal IP, or by denying listen-port access from outside world
+using iptables.
+</p>
+
+<h1>STATUS</h1>
+
+<p>
+You can request status dump, by using <i>smtp-gated -s config_file</i> or by
+sending SIGUSR1 to daemon process. This will write status to the <i>statusfile</i>.
+</p>
+<p>
+It will contain the following (may change in further versions):
+</p>
+
+<dl>
+<dt><b>Start time: Thu Mar 3 17:06:21 2005</b></dt><dd>
+daemon start time
+</dd>
+<dt><b>Restart time: Tue Mar 15 14:34:41 2005</b></dt><dd>
+daemon last SIGHUP time
+</dd>
+<dt><b>Uptime: 11d 21h 28m 22s</b></dt><dd>
+time since 'Start time'
+</dd>
+<dt><b>Found: 43/0 (viruses/spam)</b></dt><dd>
+number of [viruses/spam] found so far; this *does not count* any virus/spam avoided with client-lock (see: Rejects: lock)
+</dd>
+<dt><b>Children: 1/18 (current/max)</b></dt><dd>
+current/maximum number of user sessions
+</dd>
+<dt><b>Requests: 25238/113/7506 (total/direct/empty)</b></dt><dd>
+total number of sessions/direct (=TLS) sessions/empty sessions (=without transaction).
+</dd>
+<dt><b>Rejects: 0/458/10421/0 (host/ident/lock/other)</b></dt><dd>
+Rejected requests; because of per-host-limit/per-ident-limit/client-locked/other reason.
+</dd>
+</dl>
+
+<p>
+Next, current running sessions:
+</p>
+
+<dl>
+<dt><b>slot</b></dt><dd>
+internal connection table client slot
+</dd>
+<dt><b>pid</b></dt><dd>
+serving process ID
+</dd>
+<dt><b>state</b></dt><dd>
+SMTP session state
+</dd>
+<dt><b>flags</b></dt><dd>
+session flags:
+</dd>
+</dl>
+
+	<blockquote>
+	AUTH: a=supported, A=accepted
+	</blockquote>
+
+<dl>
+<dt><b>time</b></dt><dd>
+session running time
+</dd>
+<dt><b>source</b></dt><dd>
+source (client) IP
+</dd>
+<dt><b>target</b></dt><dd>
+destination (server/MTA) IP 
+</dd>
+<dt><b>trns</b></dt><dd>
+number of current transaction
+</dd>
+<dt><b>cli_rx</b></dt><dd>
+client-received byte count
+</dd>
+<dt><b>srv_rx</b></dt><dd>
+server-received byte count
+</dd>
+<dt><b>kbps</b></dt><dd>
+average speed (since connection started) in kbits/second
+</dd>
+<dt><b>ident</b></dt><dd>
+client ident*
+</dd>
+</dl>
+
+<h1>SEE ALSO</h1>
+
+<p>
+smtp-gated.conf(5)
+</p>
+
+<h1>BUGS</h1>
+
+<p>
+See <a href="http://smtp-proxy.klolik.org/#bugs">http://smtp-proxy.klolik.org/#bugs</a> for details.
+</p>
+
+<h1>HOMEPAGE</h1>
+
+<p>
+<a href="http://smtp-proxy.klolik.org">http://smtp-proxy.klolik.org</a>
+</p>
+
+<h1>AUTHOR</h1>
+
+<p>
+Bartlomiej Korupczynski
+</p>
+<p>
+<img align="middle" src="who.png" border="0" alt=""/>
+</p>
+
+<!-- xhtml code generated by txt2tags 2.6 (http://txt2tags.org) -->
+<!-- cmdline: txt2tags -t xhtml -i smtp-gated.t2t -o smtp-gated.html -->
+</body></html>

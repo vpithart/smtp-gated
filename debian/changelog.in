@@ -1,0 +1,6 @@
+smtp-gated (@VERSION@) unstable; urgency=low
+
+  * Configure autorelease; see ChangeLog for changes
+
+ -- bartek <bartek@klolik.org>  @RELEASE_DATE@
+

@@ -1,0 +1,6 @@
+#
+# mksd configuration
+#
+
+OPTIONS="-u smtpgw -g smtpgw scan 12"
+

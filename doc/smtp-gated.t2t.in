@@ -1,0 +1,167 @@
+smtp-gated
+Bartlomiej Korupczynski
+%%mtime(%Y-%m-%d)
+
+%!encoding iso-8859-1
+%!options(xhtml): --mask-email
+%!preproc(xhtml): '^%xhtml%' ''
+%!preproc(man): '^%man%' ''
+
+= NAME =
+
+**smtp-gated** - transparently block viruses during SMTP connections
+
+= VERSION =
+
+This manual describes smtp-gated v. @VERSION@
+
+= SYNOPSIS =
+
+**smtp-gated** [-f] [ -h | -s | -S | -r | -t | -T | -v | -V ] config_file
+
+= DESCRIPTION =
+
+**smtp-gated** checks SMTP traffic and blocks any viruses found.
+It can also spam-check messages. E-mail containing virus is blocked
+(SMTP-server session is brought down), and a proper message is sent
+to client software. E-mails found to be a SPAM, can also be blocked,
+or just the fact is logged.
+
+**smtp-gated** uses netfilter framework to forward connections to destination
+MTA. It's meant to be transparent, so any SMTP-authentication works ok.
+Also pipelining extension is supported.
+
+Daemonised scanning engines support is integrated, so there is minimal
+performance hit on scanning.
+
+= CONFIGURATION =
+
+Configuration is done with config_file. There is no default path for it.
+If you would like to create configuration template, see **-t** option:
+
+	smtp-gated -t | sed -e 's/^[a-z]/;&/' >/etc/smtp-gated.conf
+
+To make upgrades easier, be sure not to uncomment unneccesary options.
+
+= OPTIONS =
+
+Options marked with //CONFIG// require config file on command line. For others,
+no config file means default configuration.
+
+: **-C name** [CONFIG]
+show value for configuration variable "name"
+: **-f**
+run foreground, use for debugging
+: **-h**
+command reference
+: **-K** [CONFIG]
+kill running process (TERM in SIGNALS)
+: **-s** [CONFIG]
+prepare & show process status (USR1 in SIGNALS)
+: **-S** [CONFIG]
+prepare & show process status file name
+: **-r** [CONFIG]
+reload configuration (HUP in SIGNALS)
+: **-t**
+syntax check & dump configuration (except messages)
+: **-T** [CONFIG]
+syntax check & dump configuration (including messages)
+: **-v**
+show version
+: **-V**
+show version & compiled-in options
+: **config_file**
+required for most commands, except **-t** and **-T**.
+
+
+= SIGNALS =
+
+: **HUP**
+reload configuration
+: **USR1**
+dump statistics (see -s in OPTIONS)
+: **TERM**
+close server socket and wait for existing sessions to finish.
+: **QUIT**
+same as above
+
+
+= RELAYING =
+
+Listening port __MUST__ be protected from world-access or proxy will
+act as open-relay. This can be achieved either by setting bind_address
+to internal IP, or by denying listen-port access from outside world
+using iptables.
+
+
+= STATUS =
+
+You can request status dump, by using //smtp-gated -s config_file// or by
+sending SIGUSR1 to daemon process. This will write status to the //statusfile//.
+
+It will contain the following (may change in further versions):
+: **Start time: Thu Mar 3 17:06:21 2005**
+daemon start time
+: **Restart time: Tue Mar 15 14:34:41 2005**
+daemon last SIGHUP time
+: **Uptime: 11d 21h 28m 22s**
+time since 'Start time'
+: **Found: 43/0 (viruses/spam)**
+number of [viruses/spam] found so far; this *does not count* any virus/spam avoided with client-lock (see: Rejects: lock)
+: **Children: 1/18 (current/max)**
+current/maximum number of user sessions
+: **Requests: 25238/113/7506 (total/direct/empty)**
+total number of sessions/direct (=TLS) sessions/empty sessions (=without transaction).
+: **Rejects: 0/458/10421/0 (host/ident/lock/other)**
+Rejected requests; because of per-host-limit/per-ident-limit/client-locked/other reason.
+
+
+Next, current running sessions:
+
+: **slot**
+internal connection table client slot
+: **pid**
+serving process ID
+: **state**
+SMTP session state
+: **flags**
+session flags:
+	AUTH: a=supported, A=accepted
+: **time**
+session running time
+: **source**
+source (client) IP
+: **target**
+destination (server/MTA) IP 
+: **trns**
+number of current transaction
+: **cli_rx**
+client-received byte count
+: **srv_rx**
+server-received byte count
+: **kbps**
+average speed (since connection started) in kbits/second
+: **ident**
+client ident*
+
+
+= SEE ALSO =
+
+smtp-gated.conf(5)
+
+= BUGS =
+
+See http://smtp-proxy.klolik.org/#bugs for details.
+
+= HOMEPAGE =
+
+http://smtp-proxy.klolik.org
+
+= AUTHOR =
+
+%man%Bartlomiej Korupczynski <smtp-proxy@klolik.org>
+%xhtml%Bartlomiej Korupczynski
+%xhtml%
+%xhtml%[who.png]
+
+
